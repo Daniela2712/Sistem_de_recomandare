@@ -1,11 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:sistem_de_recomandare/model/routes.dart';
+import 'package:sistem_de_recomandare/model/tronsons.dart';
 import 'package:sistem_de_recomandare/model/users.dart';
+import 'package:sistem_de_recomandare/model/hotels.dart';
 import 'package:moor/moor.dart';
 import 'package:moor/ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+
+import '../hotel_service.dart';
+import 'hotels.dart';
 
 part 'database_manager.g.dart';
 
@@ -18,8 +24,8 @@ LazyDatabase openConnection() {
 }
 
 @UseMoor(tables: [Users])
-class AppDatabase extends _$AppDatabase {
-  AppDatabase(QueryExecutor e) : super(e);
+class UserDatabase extends _$UserDatabase {
+  UserDatabase(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 1;
@@ -34,4 +40,61 @@ class AppDatabase extends _$AppDatabase {
 
   // Delete user
   Future deleteUser(User user) => delete(users).delete(user);
+}
+
+@UseMoor(tables: [Tronsons])
+class TronsonDatabase extends _$TronsonDatabase {
+  TronsonDatabase(QueryExecutor e) : super(e);
+
+  @override
+  int get schemaVersion => 1;
+  // Get all users
+  Future<List<Tronson>> getAllUsers() => select(tronsons).get();
+
+  // Add user
+  Future insertUser(Tronson tronson) => into(tronsons).insert(tronson);
+
+  // Update user
+  Future updateUser(Tronson tronson) => update(tronsons).replace(tronson);
+
+  // Delete user
+  Future deleteUser(Tronson tronson) => delete(tronsons).delete(tronson);
+}
+
+@UseMoor(tables: [Routes])
+class RouteDatabase extends _$RouteDatabase {
+  RouteDatabase(QueryExecutor e) : super(e);
+
+  @override
+  int get schemaVersion => 1;
+  // Get all users
+  Future<List<Route>> getAllRoutes() => select(routes).get();
+
+  // Add user
+  Future insertRoute(Route route) => into(routes).insert(route);
+
+  // Update user
+  Future updateRoute(Route route) => update(routes).replace(route);
+
+  // Delete user
+  Future deleteRoute(Route route) => delete(routes).delete(route);
+}
+
+@UseMoor(tables: [Hotels])
+class HotelDatabase extends _$HotelDatabase {
+  HotelDatabase(QueryExecutor e) : super(e);
+
+  @override
+  int get schemaVersion => 1;
+  // Get all users
+  Future<List<Hotel>> getAllRoutes() => select(hotels).get();
+
+  // Add user
+  Future insertRoute(Hotel hotel) => into(hotels).insert(hotel);
+
+  // Update user
+  Future updateRoute(Hotel hotel) => update(hotels).replace(hotel);
+
+  // Delete user
+  Future deleteRoute(Hotel hotel) => delete(hotels).delete(hotel);
 }

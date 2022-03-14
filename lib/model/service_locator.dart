@@ -7,5 +7,5 @@ import 'database_manager.dart';
 GetIt locator = GetIt.instance;
 
 Future setupLocator() async {
-locator.registerSingleton(AppDatabase(openConnection()));
+locator.registerSingleton(UserDatabase(openConnection()));
 }

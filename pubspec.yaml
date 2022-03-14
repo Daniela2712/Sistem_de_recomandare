@@ -23,6 +23,7 @@ dependencies:
   moor_flutter: ^4.0.0
   path_provider: ^2.0.8
   sqlite3_flutter_libs: ^0.4.2
+  geocoding: ^2.0.2
 
 dev_dependencies:
   flutter_test:

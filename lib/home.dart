@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
         country: country,
         language: language);
 
-    await locator<AppDatabase>().insertUser(user);
+    await locator<UserDatabase>().insertUser(user);
   }
 
   @override
