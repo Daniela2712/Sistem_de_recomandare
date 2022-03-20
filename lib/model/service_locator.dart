@@ -8,4 +8,6 @@ GetIt locator = GetIt.instance;
 
 Future setupLocator() async {
 locator.registerSingleton(UserDatabase(openConnection()));
+locator.registerSingleton(HotelDatabase(openConnection()));
+locator.registerSingleton(AirportsDatabase(openConnection()));
 }

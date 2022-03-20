@@ -3,6 +3,8 @@ import 'package:sistem_de_recomandare/tronson_service.dart';
 import 'package:uuid/uuid.dart';
 
 import 'dropdown.dart';
+import 'model/database_manager.dart';
+import 'model/service_locator.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,6 +50,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
   String _destTypeController;
   String _travelModeController;
 
+
+
   _submitForm() {
     if (_formKey.currentState.validate()) {
       final userTravelDetails = {
@@ -57,7 +61,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
         'travelMode': _travelModeController,
       };
      final sessionToken = Uuid().v4();
-      TronsonRouteApiProvider(sessionToken).getTronsonRouteDetailFromOriginAndDestination("Buzau","London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
+      TronsonRouteApiProvider(sessionToken).getNearestAirportFromOrigin("Buzau");
+          //,"London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
       print(userTravelDetails.toString());
 
       // If the form passes validation, display a Snackbar.
@@ -68,6 +73,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       //_nextFocus(_nameFocusNode);
     }
   }
+
 
   String _validateInput(String value) {
     if(value.trim().isEmpty) {

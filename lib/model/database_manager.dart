@@ -1,17 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:sistem_de_recomandare/airport_service.dart';
 import 'package:sistem_de_recomandare/model/routes.dart';
 import 'package:sistem_de_recomandare/model/tronsons.dart';
 import 'package:sistem_de_recomandare/model/users.dart';
 import 'package:sistem_de_recomandare/model/hotels.dart';
+import 'package:sistem_de_recomandare/model/airports.dart';
 import 'package:moor/moor.dart';
 import 'package:moor/ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-
-import '../hotel_service.dart';
-import 'hotels.dart';
 
 part 'database_manager.g.dart';
 
@@ -97,4 +96,23 @@ class HotelDatabase extends _$HotelDatabase {
 
   // Delete user
   Future deleteRoute(Hotel hotel) => delete(hotels).delete(hotel);
+}
+@UseMoor(tables: [Airports])
+class AirportsDatabase extends _$AirportsDatabase {
+  AirportsDatabase(QueryExecutor e) : super(e);
+
+  @override
+  int get schemaVersion => 1;
+
+  // Get all users
+  Future<List<Airport>> getAllRoutes() => select(airports).get();
+
+  // Add user
+  Future insertAirport(Airport airport) => into(airports).insert(airport);
+
+  // Update user
+  Future updateRoute(Airport airport) => update(airports).replace(airport);
+
+  // Delete user
+  Future deleteRoute(Airport airport) => delete(airports).delete(airport);
 }

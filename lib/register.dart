@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'model/database_manager.dart';
+import 'model/service_locator.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -61,6 +64,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
       //_formKey.currentState.reset();
       //_nextFocus(_nameFocusNode);
     }
+  }
+
+  void createUser(
+      {String username, String mail, String country, String language}) async {
+    User user = User(
+        id: null,
+        username: username,
+        mail: mail,
+        country: country,
+        language: language);
+
+    await locator<UserDatabase>().insertUser(user);
   }
 
   String _validateInput(String value) {

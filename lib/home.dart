@@ -26,19 +26,21 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  void createUser(
-      {String username, String mail, String country, String language}) async {
-    User user = User(
+
+  void createAirport(
+      {String name, String distance,String city, String country, String iataCode}) async {
+    Airport airport = Airport(
         id: null,
-        username: username,
-        mail: mail,
+        name: name,
+        distance: distance,
+        city: city,
         country: country,
-        language: language);
+        iataCode: iataCode);
 
-    await locator<UserDatabase>().insertUser(user);
-  }
+    await locator<AirportsDatabase>().insertAirport(airport);
 
-  @override
+
+    @override
   Widget build(BuildContext context) {
     final _username = Padding(
         padding:
@@ -72,25 +74,25 @@ class _HomeState extends State<Home> {
           controller: languageController,
         ));
 
-    final _createButton = Padding(
-      padding: EdgeInsets.only(top: 50.0, bottom: 0.0, right: 50.0, left: 50.0),
-      child: RaisedButton(
-        onPressed: () => createUser(
-            username: usernameController.text,
-            mail: mailController.text,
-            country: countryController.text,
-            language: languageController.text),
-        child: const Text('Add User', style: TextStyle(fontSize: 20)),
-      ),
-    );
+    // final _createButton = Padding(
+    //   padding: EdgeInsets.only(top: 50.0, bottom: 0.0, right: 50.0, left: 50.0),
+    //   child: RaisedButton(
+    //     onPressed: () => createAirport(
+    //         username: usernameController.text,
+    //         mail: mailController.text,
+    //         country: countryController.text,
+    //         language: languageController.text),
+    //     child: const Text('Add User', style: TextStyle(fontSize: 20)),
+    //   ),
+    // );
 
-    final _screen = Material(
-        color: Colors.transparent,
-        child: new Container(
-          child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [_username, _mail, _country, _language, _createButton]),
-        ));
+    // final _screen = Material(
+    //     color: Colors.transparent,
+    //     child: new Container(
+    //       child: new Column(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           children: [_username, _mail, _country, _language, _createButton]),
+    //     ));
 
     return Scaffold(
       backgroundColor: Colors.purple,
@@ -101,12 +103,19 @@ class _HomeState extends State<Home> {
           child: ConstrainedBox(
             constraints:
             BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-            child: Center(
-              child: _screen,
-            ),
+            // child: Center(
+            //   child: _screen,
+            // ),
           ),
         ),
       ),
     );
+  }
+}
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }

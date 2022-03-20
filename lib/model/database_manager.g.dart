@@ -1351,3 +1351,356 @@ abstract class _$HotelDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [hotels];
 }
+
+class Airport extends DataClass implements Insertable<Airport> {
+  final int id;
+  final String name;
+  final String distance;
+  final String city;
+  final String country;
+  final String iataCode;
+  Airport(
+      {@required this.id,
+      @required this.name,
+      @required this.distance,
+      @required this.city,
+      @required this.country,
+      @required this.iataCode});
+  factory Airport.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return Airport(
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      distance: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}distance']),
+      city: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}city']),
+      country: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}country']),
+      iataCode: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}iata_code']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || distance != null) {
+      map['distance'] = Variable<String>(distance);
+    }
+    if (!nullToAbsent || city != null) {
+      map['city'] = Variable<String>(city);
+    }
+    if (!nullToAbsent || country != null) {
+      map['country'] = Variable<String>(country);
+    }
+    if (!nullToAbsent || iataCode != null) {
+      map['iata_code'] = Variable<String>(iataCode);
+    }
+    return map;
+  }
+
+  AirportsCompanion toCompanion(bool nullToAbsent) {
+    return AirportsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      distance: distance == null && nullToAbsent
+          ? const Value.absent()
+          : Value(distance),
+      city: city == null && nullToAbsent ? const Value.absent() : Value(city),
+      country: country == null && nullToAbsent
+          ? const Value.absent()
+          : Value(country),
+      iataCode: iataCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(iataCode),
+    );
+  }
+
+  factory Airport.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Airport(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      distance: serializer.fromJson<String>(json['distance']),
+      city: serializer.fromJson<String>(json['city']),
+      country: serializer.fromJson<String>(json['country']),
+      iataCode: serializer.fromJson<String>(json['iataCode']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'distance': serializer.toJson<String>(distance),
+      'city': serializer.toJson<String>(city),
+      'country': serializer.toJson<String>(country),
+      'iataCode': serializer.toJson<String>(iataCode),
+    };
+  }
+
+  Airport copyWith(
+          {int id,
+          String name,
+          String distance,
+          String city,
+          String country,
+          String iataCode}) =>
+      Airport(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        distance: distance ?? this.distance,
+        city: city ?? this.city,
+        country: country ?? this.country,
+        iataCode: iataCode ?? this.iataCode,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Airport(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('distance: $distance, ')
+          ..write('city: $city, ')
+          ..write('country: $country, ')
+          ..write('iataCode: $iataCode')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, distance, city, country, iataCode);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Airport &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.distance == this.distance &&
+          other.city == this.city &&
+          other.country == this.country &&
+          other.iataCode == this.iataCode);
+}
+
+class AirportsCompanion extends UpdateCompanion<Airport> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> distance;
+  final Value<String> city;
+  final Value<String> country;
+  final Value<String> iataCode;
+  const AirportsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.distance = const Value.absent(),
+    this.city = const Value.absent(),
+    this.country = const Value.absent(),
+    this.iataCode = const Value.absent(),
+  });
+  AirportsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String name,
+    @required String distance,
+    @required String city,
+    @required String country,
+    @required String iataCode,
+  })  : name = Value(name),
+        distance = Value(distance),
+        city = Value(city),
+        country = Value(country),
+        iataCode = Value(iataCode);
+  static Insertable<Airport> custom({
+    Expression<int> id,
+    Expression<String> name,
+    Expression<String> distance,
+    Expression<String> city,
+    Expression<String> country,
+    Expression<String> iataCode,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (distance != null) 'distance': distance,
+      if (city != null) 'city': city,
+      if (country != null) 'country': country,
+      if (iataCode != null) 'iata_code': iataCode,
+    });
+  }
+
+  AirportsCompanion copyWith(
+      {Value<int> id,
+      Value<String> name,
+      Value<String> distance,
+      Value<String> city,
+      Value<String> country,
+      Value<String> iataCode}) {
+    return AirportsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      distance: distance ?? this.distance,
+      city: city ?? this.city,
+      country: country ?? this.country,
+      iataCode: iataCode ?? this.iataCode,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (distance.present) {
+      map['distance'] = Variable<String>(distance.value);
+    }
+    if (city.present) {
+      map['city'] = Variable<String>(city.value);
+    }
+    if (country.present) {
+      map['country'] = Variable<String>(country.value);
+    }
+    if (iataCode.present) {
+      map['iata_code'] = Variable<String>(iataCode.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AirportsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('distance: $distance, ')
+          ..write('city: $city, ')
+          ..write('country: $country, ')
+          ..write('iataCode: $iataCode')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AirportsTable extends Airports with TableInfo<$AirportsTable, Airport> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $AirportsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedColumn<int> _id;
+  @override
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedColumn<String> _name;
+  @override
+  GeneratedColumn<String> get name =>
+      _name ??= GeneratedColumn<String>('name', aliasedName, false,
+          type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _distanceMeta = const VerificationMeta('distance');
+  GeneratedColumn<String> _distance;
+  @override
+  GeneratedColumn<String> get distance =>
+      _distance ??= GeneratedColumn<String>('distance', aliasedName, false,
+          type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _cityMeta = const VerificationMeta('city');
+  GeneratedColumn<String> _city;
+  @override
+  GeneratedColumn<String> get city =>
+      _city ??= GeneratedColumn<String>('city', aliasedName, false,
+          type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _countryMeta = const VerificationMeta('country');
+  GeneratedColumn<String> _country;
+  @override
+  GeneratedColumn<String> get country =>
+      _country ??= GeneratedColumn<String>('country', aliasedName, false,
+          type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _iataCodeMeta = const VerificationMeta('iataCode');
+  GeneratedColumn<String> _iataCode;
+  @override
+  GeneratedColumn<String> get iataCode =>
+      _iataCode ??= GeneratedColumn<String>('iata_code', aliasedName, false,
+          type: const StringType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, distance, city, country, iataCode];
+  @override
+  String get aliasedName => _alias ?? 'airports';
+  @override
+  String get actualTableName => 'airports';
+  @override
+  VerificationContext validateIntegrity(Insertable<Airport> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('distance')) {
+      context.handle(_distanceMeta,
+          distance.isAcceptableOrUnknown(data['distance'], _distanceMeta));
+    } else if (isInserting) {
+      context.missing(_distanceMeta);
+    }
+    if (data.containsKey('city')) {
+      context.handle(
+          _cityMeta, city.isAcceptableOrUnknown(data['city'], _cityMeta));
+    } else if (isInserting) {
+      context.missing(_cityMeta);
+    }
+    if (data.containsKey('country')) {
+      context.handle(_countryMeta,
+          country.isAcceptableOrUnknown(data['country'], _countryMeta));
+    } else if (isInserting) {
+      context.missing(_countryMeta);
+    }
+    if (data.containsKey('iata_code')) {
+      context.handle(_iataCodeMeta,
+          iataCode.isAcceptableOrUnknown(data['iata_code'], _iataCodeMeta));
+    } else if (isInserting) {
+      context.missing(_iataCodeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Airport map(Map<String, dynamic> data, {String tablePrefix}) {
+    return Airport.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $AirportsTable createAlias(String alias) {
+    return $AirportsTable(_db, alias);
+  }
+}
+
+abstract class _$AirportsDatabase extends GeneratedDatabase {
+  _$AirportsDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  $AirportsTable _airports;
+  $AirportsTable get airports => _airports ??= $AirportsTable(this);
+  @override
+  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  @override
+  List<DatabaseSchemaEntity> get allSchemaEntities => [airports];
+}

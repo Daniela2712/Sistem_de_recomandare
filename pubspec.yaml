@@ -24,6 +24,8 @@ dependencies:
   path_provider: ^2.0.8
   sqlite3_flutter_libs: ^0.4.2
   geocoding: ^2.0.2
+  amadeus_flutter: ^0.0.1+1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
