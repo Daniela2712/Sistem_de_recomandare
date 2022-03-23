@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_de_recomandare/airport_service.dart';
 import 'package:sistem_de_recomandare/tronson_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -61,7 +62,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         'travelMode': _travelModeController,
       };
      final sessionToken = Uuid().v4();
-      TronsonRouteApiProvider(sessionToken).getNearestAirportFromOrigin("Buzau");
+      AirportsList().getNearestAirportFromOrigin("Cluj");
           //,"London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
       print(userTravelDetails.toString());
 
