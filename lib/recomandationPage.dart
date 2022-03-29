@@ -62,7 +62,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         'travelMode': _travelModeController,
       };
      final sessionToken = Uuid().v4();
-      AirportsList().getNearestAirportFromOrigin("Cluj");
+      TronsonRouteApiProvider().getNearestAirportFromOrigin("Brasov");
           //,"London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
       print(userTravelDetails.toString());
 
