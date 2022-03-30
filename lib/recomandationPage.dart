@@ -3,6 +3,7 @@ import 'package:sistem_de_recomandare/airport_service.dart';
 import 'package:sistem_de_recomandare/tronson_service.dart';
 import 'package:uuid/uuid.dart';
 
+import 'bestTransit_service.dart';
 import 'dropdown.dart';
 import 'model/database_manager.dart';
 import 'model/service_locator.dart';
@@ -62,7 +63,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
         'travelMode': _travelModeController,
       };
      final sessionToken = Uuid().v4();
-      TronsonRouteApiProvider().getNearestAirportFromOrigin("Brasov");
+      //TronsonRouteApiProvider().getNearestAirportFromOrigin("Brasov");
+      BestTransitProvider().bestTransitMode("Brasov","Constanta");
           //,"London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
       print(userTravelDetails.toString());
 
