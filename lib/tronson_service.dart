@@ -41,7 +41,9 @@ class TronsonRouteApiProvider {
   double tronsonCostWithCar(String distance) {
     var consum = 6; // 6 litre/100km
     var carburantCost = 7; // 7 lei per litre
-    var cost = (consum / 100) * int.parse(distance) * carburantCost;
+    String distanceConverted=distance.replaceAll("km", "").trim();
+    double cost = (consum / 100) * double.parse(distanceConverted) * carburantCost;
+    print(cost);
     return cost;
   }
 
@@ -49,83 +51,7 @@ class TronsonRouteApiProvider {
   //xl........1km
   //x=6*1/100=0.06l
 
-  Future<BestTransit> bestTransitMode(String origin, String destination) async {
-    // double pBuget=double.parse(buget)*0.3;  //30% from total buget
-    List<double> distanceVector = [];
-    List<double> durationVector = [];
-    List<double> costVector = [];
-    List<String> vehicles = ["Car","Train", "Airplane"];
-    List<double> sumVehicle = [];
-    List<double> finalSum = [];
-    int index;
-
-    // print(romaniaAirportsMap.length);
-    try {
-      final CarDetails = await getDistanceToAirport(
-          origin, destination);
-      String distanceWithCar = CarDetails.distance.replaceAll("km", "").trim();
-      String durationWithCar = CarDetails.duration;
-
-      //var costWithCar = CarDetails.cost;
-      print(distanceWithCar);
-      print(durationWithCar);
-      if (distanceWithCar != null && durationWithCar != null
-          ) {
-        print("i m hereee");
-        distanceVector.add(double.parse(distanceWithCar));
-        print(distanceVector);
-        durationVector.add(double.parse(durationWithCar));
-        print(durationVector[0]*0.5);
-       // costVector.add(double.parse(costWithCar));
-      }
-      // final TrainDetails = await getDistanceToAirport(
-      //     origin, destination);
-      // var distanceWithTrain = TrainDetails.distance;
-      // var durationWithTrain = TrainDetails.duration;
-      // //var costWithTrain = TrainDetails.cost;
-      // if (distanceWithCar != null && durationWithCar != null
-      //    ) {
-      //   distanceVector.add(double.parse(distanceWithTrain));
-      //   durationVector.add(durationWithTrain);
-      //  // costVector.add(double.parse(costWithTrain));
-      // }
-      // final FlyDetails = await getDistanceToAirport(
-      //     origin, destination);
-      // var distanceWithAir = FlyDetails.distance;
-      // var durationWithAir = FlyDetails.duration;
-      // var costWithAir = FlyDetails.cost;
-      // if (distanceWithCar != null && durationWithCar != null ) {
-      //   distanceVector.add(double.parse(distanceWithAir));
-      //   durationVector.add(durationWithAir);
-      //   costVector.add(double.parse(costWithAir));
-      // }
-      for (int i = 0; i < 1; i++) {
-        print(i);
-        double sum=((distanceVector[i]*0.5)+(durationVector[i]*0.35));
-        sumVehicle.add(sum);
-        print(sumVehicle);
-            //+ double.parse(durationVector[i].replaceAll(new RegExp(r'[^0-9,.]'), '')) * 0.35;
-        //finalSum[i]=sumVehicle[i];
-        double minimum = sumVehicle.reduce(min);
-        if (sumVehicle[i] == minimum) {
-          index = i;
-        }
-      }
-
-      BestTransit bestTransit;
-      bestTransit.vehicle = vehicles[index];
-      bestTransit.cost = costVector[index] as String;
-      bestTransit.duration = durationVector[index] as String;
-      bestTransit.distance = distanceVector[index] as String;
-      print(bestTransit.vehicle);
-      print(bestTransit);
-      return bestTransit;
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  Future<String> getDistanceToRomanianAirport(String origin) async {
+  Future<List<List<String>>> getRouteDetailToRomanianAirport(String origin) async {
     List romaniaAirportsMap = [
       {
         "name": "Henri Coanda International Airport",
@@ -170,38 +96,46 @@ class TronsonRouteApiProvider {
         "iataCode": "TSR",
       }
     ];
-      int index = 0;
-      List<double> distanceVector = [];
-      // print(romaniaAirportsMap.length);
+
+      List<List<String>> totalDetailsVector = [];
+
       for (int i = 0; i < romaniaAirportsMap.length; i++) {
-        print(romaniaAirportsMap[i]["name"]);
-          final distanceTo = await getDistanceToAirport(origin, romaniaAirportsMap[i]["name"]);
-          var intStr = distanceTo.distance.replaceAll(new RegExp(r'[^0-9,.]'), '');
-          distanceVector.add(double.parse(intStr));
+        List<String> tronsonToAirport = [];
 
-          double dist=distanceVector[i];
-          double minimum=distanceVector.reduce(min);
-          print(dist);
-          if(dist==minimum)
-            index=i;
+          final distanceTo = await getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(
+              origin, romaniaAirportsMap[i]["name"]);
+          var intStrDist = distanceTo.distance.replaceAll(
+              new RegExp(r'[^0-9,.]'), '');
 
-          print(index);
-        }
+          tronsonToAirport.add(intStrDist);
+          var intStrDur = distanceTo.duration.replaceAll(
+              new RegExp(r'[^0-9,.]'), '');
 
-        print(romaniaAirportsMap[index]["iataCode"]);
+          tronsonToAirport.add(intStrDur);
+          tronsonToAirport.add(distanceTo.cost.toString());
+          tronsonToAirport.add(distanceTo.origin);
+          tronsonToAirport.add(distanceTo.destination);
 
-        return romaniaAirportsMap[index]["iataCode"];
+          totalDetailsVector.add(tronsonToAirport);
+      }
+    print("-----------------------");
+    for (int i = 0; i < totalDetailsVector.length; i++) {
+      for (int j = 0; j < 5; j++) {
+        print(totalDetailsVector[i][j]);
+      }
+      print("-----------------------");
+    }
 
+        return totalDetailsVector ;
   }
 
 
-  Future<Tronson> getDistanceToAirport(
+  Future<Tronson> getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(
       String origin,
       String destination
       ) async {
     var Url = "https://maps.googleapis.com/maps/api/directions/json?origin=$origin &destination=$destination&key=$directionsApiKey";
     final results = await client.get(Uri.parse(Url));
-    print(results.body);
     final tronson = Tronson();
 
     if (results.statusCode == 200) {
@@ -209,8 +143,6 @@ class TronsonRouteApiProvider {
       if (result['status'] == 'OK') {
         final components =
         result['routes'] as List<dynamic>;
-        //print(components);
-        // build result
         components.forEach((c) {
           final leg = c['legs'] as List<dynamic>;
           leg.forEach((d) {
@@ -218,12 +150,13 @@ class TronsonRouteApiProvider {
               tronson.duration = d['duration']['value'].toString();
             }
             if (d['distance'] != null) {
-              print(d['distance']['text']);
               tronson.distance = d['distance']['text'].toString();
+              tronson.cost = tronsonCostWithCar(tronson.distance).toString();
+              tronson.origin = origin;
+              tronson.destination = destination;
             }
           });
         });
-       // tronson.cost = tronsonCostWithCar(tronson.distance) as String;
       } else {
         throw Exception('Failed to fetch suggestion');
       }
@@ -235,7 +168,7 @@ class TronsonRouteApiProvider {
   Future<List<String>> getNearestAirportFromOrigin(String origin) async {
     List<Location> location = await locationFromAddress(origin);
 
-    getDistanceToRomanianAirport(origin);
+    //getDistanceToRomanianAirport(origin);
 
     var latitude = location[0].latitude;
     var longitude = location[0].longitude;
@@ -256,6 +189,7 @@ class TronsonRouteApiProvider {
         "client_secret": "rIJW2hknmn7g4o5w",
       },
     );
+    //https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=$latitude&longitude=$longitude&radius=500&page%5Blimit%5D=3&page%5Boffset%5D=0&sort=distance
     print(secResponse);
     if (secResponse.statusCode == 200) {
       try {
@@ -270,7 +204,7 @@ class TronsonRouteApiProvider {
           var bearerToken = '$tokenType ' + '$token';
           print("token: " + bearerToken);
           var response = await client.get(Uri.parse(
-              'https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=$latitude&longitude=$longitude&radius=500&page%5Blimit%5D=3&page%5Boffset%5D=0&sort=distance'),
+              nearestAirportUrl),
               headers: {
                 "Authorization": bearerToken,
 
@@ -279,6 +213,7 @@ class TronsonRouteApiProvider {
           print(result);
           if (result['status'] == 'OK') {
             final components = result['data'] as List<dynamic>;
+            print(components);
             airportName = result['data']['name'];
             iataCode = result['data']['iataCode'];
             print(components);
@@ -302,54 +237,9 @@ class TronsonRouteApiProvider {
     }
   }
 
-
-    Future<Tronson> getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(
+    Future<Tronson> getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
         String origin,
-        String destination,
-        ) async {
-      var driveUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=$origin &destination=$destination&mode=drive&key=$directionsApiKey";
-      final response = await client.get(Uri.parse(driveUrl));
-      print(response.body);
-      final tronson = Tronson();
-      if (response.statusCode == 200) {
-        final result = json.decode(response.body);
-       // print(result);
-        if (result['status'] == 'OK') {
-          final components =
-          result['routes'] as List<dynamic>;
-          //print(components);
-          components.forEach((c) {
-            final leg = c['legs'] as List<dynamic>;
-            leg.forEach((d) {
-              if (d['duration'] != null) {
-                tronson.duration = d['duration']['text'];
-              }
-              if (d['distance'] != null) {
-               // print(d['distance']['text']);
-                tronson.distance = d['distance']['text'].toString();
-              }
-            });
-          });
-          tronson.cost = tronsonCostWithCar(tronson.distance) as String;
-          tronson.origin = origin;
-          tronson.destination = destination;
-         // print(tronson.cost);
-        } else {
-          throw Exception('Failed to fetch suggestion');
-        }
-      }
-      return tronson;
-    }
-
-
-    Future<
-        Tronson> getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
-        String origin,
-        String destination,
-        // String buget,
-        // String numberOfPersons,
-        // String destinationType,
-        // String travelMode
+        String destination
       ) async {
       var trainUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=$origin &destination=$destination&mode=transit&key=$directionsApiKey&transit_mode=train";
       final results = await client.get(Uri.parse(trainUrl));
@@ -362,7 +252,6 @@ class TronsonRouteApiProvider {
           final components =
           result['routes'] as List<dynamic>;
           print(components);
-          // build result
           components.forEach((c) {
             final leg = c['legs'] as List<dynamic>;
             leg.forEach((d) {
@@ -496,8 +385,7 @@ class TronsonRouteApiProvider {
    //    return tronson;
    // }
 
-    Future<List<
-        Tronson>> getTronsonRouteDetailFromOriginAndDestinationWithIDKInternet(
+    Future<List<Tronson>> getTronsonRouteDetailFromOriginAndDestinationWithIDKInternet(
         String origin,
         String destination,
         String buget,

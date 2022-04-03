@@ -64,10 +64,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
       };
      final sessionToken = Uuid().v4();
       //TronsonRouteApiProvider().getNearestAirportFromOrigin("Brasov");
-      BestTransitProvider().bestTransitMode("Brasov","Constanta");
+     // BestTransitProvider().bestTransitMode("Brasov","Constanta");
+     // TronsonRouteApiProvider().getDistanceToAirport("Brasov","Sibiu International Airport");
+     //TronsonRouteApiProvider().getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet("Brasov","Sibiu International Airport");
           //,"London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
-      print(userTravelDetails.toString());
-
+     // print(userTravelDetails.toString());
+       TronsonRouteApiProvider().getRouteDetailToRomanianAirport("Brasov");
       // If the form passes validation, display a Snackbar.
       // Scaffold.of(context)
       //     .showSnackBar(SnackBar(content: Text('Registration sent')));
