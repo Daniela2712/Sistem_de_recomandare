@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistem_de_recomandare/airport_service.dart';
+import 'package:sistem_de_recomandare/transit_service.dart';
 import 'package:sistem_de_recomandare/tronson_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -65,11 +66,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
      final sessionToken = Uuid().v4();
       //TronsonRouteApiProvider().getNearestAirportFromOrigin("Brasov");
      // BestTransitProvider().bestTransitMode("Brasov","Constanta");
-     // TronsonRouteApiProvider().getDistanceToAirport("Brasov","Sibiu International Airport");
+     // TronsonRouteApiProviderForTransit().getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet("Brasov","Sibiu International Airport");
      //TronsonRouteApiProvider().getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet("Brasov","Sibiu International Airport");
           //,"London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
      // print(userTravelDetails.toString());
-       TronsonRouteApiProvider().getRouteDetailToRomanianAirport("Brasov");
+      TronsonRouteApiProviderForTransit().getRouteDetailToRomanianAirportWithTrain("Brasov");
       // If the form passes validation, display a Snackbar.
       // Scaffold.of(context)
       //     .showSnackBar(SnackBar(content: Text('Registration sent')));
