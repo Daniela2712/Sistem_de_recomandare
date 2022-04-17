@@ -4,8 +4,11 @@ import 'package:sistem_de_recomandare/transit_service.dart';
 import 'package:sistem_de_recomandare/tronson_service.dart';
 import 'package:uuid/uuid.dart';
 
+import 'activities_service.dart';
 import 'bestTransit_service.dart';
 import 'dropdown.dart';
+import 'fly_service.dart';
+import 'hotel_service.dart';
 import 'model/database_manager.dart';
 import 'model/service_locator.dart';
 
@@ -70,7 +73,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
      //TronsonRouteApiProvider().getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet("Brasov","Sibiu International Airport");
           //,"London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
      // print(userTravelDetails.toString());
-      TronsonRouteApiProviderForTransit().getRouteDetailToRomanianAirportWithTrain("Brasov");
+      //HotelApiProvider().getDestinationHotelDetail("MAD");
+      ActivitiesProviderApi().getActivitiesForMultipleHotelDestinations("MAD");
+      //TronsonRouteApiProviderForFly().getRouteDetailFromAirToDestinationWithAir("MAD");
+      //ActivitiesProviderApi().getActivitiesListFromDestinationInternet("Barcelona");
+      //TronsonRouteApiProviderForTransit().getRouteDetailToRomanianAirportWithTrain("Brasov");
       // If the form passes validation, display a Snackbar.
       // Scaffold.of(context)
       //     .showSnackBar(SnackBar(content: Text('Registration sent')));
