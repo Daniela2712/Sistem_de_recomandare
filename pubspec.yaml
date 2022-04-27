@@ -26,6 +26,12 @@ dependencies:
   geocoding: ^2.0.2
   amadeus_flutter: ^0.0.1+1
   intl: ^0.17.0
+  flutter_login: ^3.2.0
+
+    # Allows you to easily use any of the 977 fonts
+  google_fonts: ^2.3.2
+    # Allow us to use .svg file
+  flutter_svg: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -35,3 +41,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+      - assets/images/
+      - assets/icons/

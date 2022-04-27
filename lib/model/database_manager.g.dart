@@ -221,9 +221,10 @@ class UsersCompanion extends UpdateCompanion<User> {
 }
 
 class $UsersTable extends Users with TableInfo<$UsersTable, User> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String _alias;
-  $UsersTable(this._db, [this._alias]);
+  $UsersTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedColumn<int> _id;
   @override
@@ -301,13 +302,13 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   User map(Map<String, dynamic> data, {String tablePrefix}) {
-    return User.fromData(data, _db,
+    return User.fromData(data, attachedDatabase,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
   $UsersTable createAlias(String alias) {
-    return $UsersTable(_db, alias);
+    return $UsersTable(attachedDatabase, alias);
   }
 }
 
@@ -563,9 +564,10 @@ class TronsonsCompanion extends UpdateCompanion<Tronson> {
 }
 
 class $TronsonsTable extends Tronsons with TableInfo<$TronsonsTable, Tronson> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String _alias;
-  $TronsonsTable(this._db, [this._alias]);
+  $TronsonsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedColumn<int> _id;
   @override
@@ -659,13 +661,13 @@ class $TronsonsTable extends Tronsons with TableInfo<$TronsonsTable, Tronson> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Tronson map(Map<String, dynamic> data, {String tablePrefix}) {
-    return Tronson.fromData(data, _db,
+    return Tronson.fromData(data, attachedDatabase,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
   $TronsonsTable createAlias(String alias) {
-    return $TronsonsTable(_db, alias);
+    return $TronsonsTable(attachedDatabase, alias);
   }
 }
 
@@ -921,9 +923,10 @@ class RoutesCompanion extends UpdateCompanion<Route> {
 }
 
 class $RoutesTable extends Routes with TableInfo<$RoutesTable, Route> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String _alias;
-  $RoutesTable(this._db, [this._alias]);
+  $RoutesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedColumn<int> _id;
   @override
@@ -1017,13 +1020,13 @@ class $RoutesTable extends Routes with TableInfo<$RoutesTable, Route> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Route map(Map<String, dynamic> data, {String tablePrefix}) {
-    return Route.fromData(data, _db,
+    return Route.fromData(data, attachedDatabase,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
   $RoutesTable createAlias(String alias) {
-    return $RoutesTable(_db, alias);
+    return $RoutesTable(attachedDatabase, alias);
   }
 }
 
@@ -1249,9 +1252,10 @@ class HotelsCompanion extends UpdateCompanion<Hotel> {
 }
 
 class $HotelsTable extends Hotels with TableInfo<$HotelsTable, Hotel> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String _alias;
-  $HotelsTable(this._db, [this._alias]);
+  $HotelsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedColumn<int> _id;
   @override
@@ -1332,13 +1336,13 @@ class $HotelsTable extends Hotels with TableInfo<$HotelsTable, Hotel> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Hotel map(Map<String, dynamic> data, {String tablePrefix}) {
-    return Hotel.fromData(data, _db,
+    return Hotel.fromData(data, attachedDatabase,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
   $HotelsTable createAlias(String alias) {
-    return $HotelsTable(_db, alias);
+    return $HotelsTable(attachedDatabase, alias);
   }
 }
 
@@ -1592,9 +1596,10 @@ class AirportsCompanion extends UpdateCompanion<Airport> {
 }
 
 class $AirportsTable extends Airports with TableInfo<$AirportsTable, Airport> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String _alias;
-  $AirportsTable(this._db, [this._alias]);
+  $AirportsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedColumn<int> _id;
   @override
@@ -1685,13 +1690,13 @@ class $AirportsTable extends Airports with TableInfo<$AirportsTable, Airport> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Airport map(Map<String, dynamic> data, {String tablePrefix}) {
-    return Airport.fromData(data, _db,
+    return Airport.fromData(data, attachedDatabase,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
   $AirportsTable createAlias(String alias) {
-    return $AirportsTable(_db, alias);
+    return $AirportsTable(attachedDatabase, alias);
   }
 }
 

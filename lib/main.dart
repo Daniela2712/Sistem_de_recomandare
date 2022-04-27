@@ -3,6 +3,7 @@ import 'package:sistem_de_recomandare/model/service_locator.dart';
 
 import 'package:sistem_de_recomandare/home.dart';
 import 'package:sistem_de_recomandare/recomandationPage.dart';
+import 'package:sistem_de_recomandare/login.dart';
 
 Future<void> main() async {
   // Register the database service before the app starts
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RegistrationForm(),
+      home: LoginScreen(),
     );
   }
 }

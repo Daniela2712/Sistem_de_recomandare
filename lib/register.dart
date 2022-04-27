@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sistem_de_recomandare/recomandationPage.dart';
 
+import 'login.dart';
 import 'model/database_manager.dart';
 import 'model/service_locator.dart';
 
@@ -49,7 +51,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   _submitForm() {
     if (_formKey.currentState.validate()) {
-      final user = {
+      var user = {
         'name': _nameController.text,
         'phone': _phoneController.text,
         'email': _emailController.text,
@@ -58,16 +60,20 @@ class _RegistrationFormState extends State<RegistrationForm> {
       print(user.toString());
 
       // If the form passes validation, display a Snackbar.
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Registration sent')));
+      // Scaffold.of(context)
+      //     .showSnackBar(SnackBar(content: Text('Registration sent')));
       //_formKey.currentState.save();
       //_formKey.currentState.reset();
       //_nextFocus(_nameFocusNode);
+      createUser(user["name"],user["email"],user["phone"],user["password"]);
+
     }
+    navigateToNextActivity(context);
+
   }
 
   void createUser(
-      {String username, String mail, String country, String language}) async {
+      String username, String mail, String country, String language) async {
     User user = User(
         id: null,
         username: username,
@@ -76,6 +82,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
         language: language);
 
     await locator<UserDatabase>().insertUser(user);
+    print("-----------------------------");
+    var usrs=await locator<UserDatabase>().getAllUsers();
+    print(usrs);
+    print("-----------------------------");
   }
 
   String _validateInput(String value) {
@@ -88,100 +98,127 @@ class _RegistrationFormState extends State<RegistrationForm> {
   _nextFocus(FocusNode focusNode) {
     FocusScope.of(context).requestFocus(focusNode);
   }
-
+  bool _isHidden = true;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body:new Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+      appBar: AppBar(
+        title: Text('User Registration'),
+      ),
+      body: Builder(
+        builder: (context) => new Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
 
-                  TextFormField(
-                    focusNode: _nameFocusNode,
-                    controller: _nameController,
-                    keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.next,
-                    validator: _validateInput,
-                    onFieldSubmitted: (String value) {
-                      _nextFocus(_phoneFocusNode);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Enter your full name',
-                      labelText: 'Full Name',
+            child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+
+                    TextFormField(
+                      focusNode: _nameFocusNode,
+                      controller: _nameController,
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      validator: _validateInput,
+                      onFieldSubmitted: (String value) {
+                        _nextFocus(_phoneFocusNode);
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Enter your full name',
+                        labelText: 'Full Name',
+                      ),
                     ),
-                  ),
-                  TextFormField(
-                    focusNode: _phoneFocusNode,
-                    controller: _phoneController,
-                    keyboardType: TextInputType.phone,
-                    textInputAction: TextInputAction.next,
-                    validator: _validateInput,
-                    onFieldSubmitted: (String value) {
-                      _nextFocus(_emailFocusNode);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Enter your phone number',
-                      labelText: 'Phone Number',
+                    TextFormField(
+                      focusNode: _phoneFocusNode,
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.next,
+                      validator: _validateInput,
+                      onFieldSubmitted: (String value) {
+                        _nextFocus(_emailFocusNode);
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Enter your phone number',
+                        labelText: 'Phone Number',
+                      ),
                     ),
-                  ),
-                  TextFormField(
-                    focusNode: _emailFocusNode,
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    validator: _validateInput,
-                    onFieldSubmitted: (String value) {
-                      _nextFocus(_passwordFocusNode);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Enter your email address',
-                      labelText: 'Email Address',
+                    TextFormField(
+                      focusNode: _emailFocusNode,
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      validator: _validateInput,
+                      onFieldSubmitted: (String value) {
+                        _nextFocus(_passwordFocusNode);
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Enter your email address',
+                        labelText: 'Email Address',
+                      ),
                     ),
-                  ),
-                  TextFormField(
-                    focusNode: _passwordFocusNode,
-                    controller: _passwordController,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    obscureText: true,
-                    validator: _validateInput,
-                    onFieldSubmitted: (String value) {
-                      _submitForm();
-                    },
-                    decoration: InputDecoration(
+                    TextFormField(
+                      focusNode: _passwordFocusNode,
+                      controller: _passwordController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      validator: _validateInput,
+                      obscureText: _isHidden,
+                      onFieldSubmitted: (String value) {
+                        _submitForm();
+                      },
+                      decoration: InputDecoration(
                         hintText: 'Enter your password',
                         labelText: 'Password',
-                        suffixIcon: Icon(Icons.visibility_off_outlined)),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: 16,
-                          ),
-                          child: ElevatedButton(
-                            onPressed: _submitForm,
-                            child: Text('Register'),
+                        suffix: InkWell(
+                          onTap: _togglePasswordView,
+                          child: Icon(
+                            _isHidden
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              )
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: 16,
+                            ),
+                            child: ElevatedButton(
+                              onPressed: _submitForm,
+                              child: Text('Register'),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+            ),
           ),
         ),
       ),
+    );
+  }
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
+  }
+  navigateToNextActivity(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => LoginScreen()
+
+        )
     );
   }
 }

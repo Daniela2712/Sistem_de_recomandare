@@ -12,38 +12,16 @@ import 'hotel_service.dart';
 import 'model/database_manager.dart';
 import 'model/service_locator.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Form Handling',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('User Registration'),
-        ),
-        body: RegistrationForm(),
-      ),
-    );
-  }
-}
-
-class RegistrationForm extends StatefulWidget {
-  RegistrationForm({Key key}) : super(key: key);
+class UserForm extends StatefulWidget {
+ // UserForm({Key key}) : super(key: key);
+   final String idHolder;
+   UserForm(this.idHolder);
 
   @override
-  _RegistrationFormState createState() => _RegistrationFormState();
+  _UserFormState createState() => _UserFormState();
 }
 
-class _RegistrationFormState extends State<RegistrationForm> {
+class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();
 
   final FocusNode _bugetFocusNode = FocusNode();
