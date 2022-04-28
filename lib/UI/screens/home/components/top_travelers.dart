@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_de_recomandare/components/section_title.dart';
-import 'package:sistem_de_recomandare/models/User.dart';
+import 'package:sistem_de_recomandare/UI/components/section_title.dart';
+import 'package:sistem_de_recomandare/UI/models/User.dart';
 
+import '../../../size_config.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
 

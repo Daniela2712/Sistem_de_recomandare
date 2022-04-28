@@ -18,9 +18,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'User Database',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme:
+        //primarySwatch: Colors.blue,
+        new ThemeData(scaffoldBackgroundColor: const Color(0xFFF5F5FF)),
+      //),
       home: LoginScreen(),
     );
   }

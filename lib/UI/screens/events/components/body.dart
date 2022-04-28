@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_de_recomandare/components/place_card.dart';
-import 'package:sistem_de_recomandare/constants.dart';
-import 'package:sistem_de_recomandare/models/TravelSpot.dart';
-import 'package:sistem_de_recomandare/size_config.dart';
+import 'package:sistem_de_recomandare/UI/components/place_card.dart';
+import 'package:sistem_de_recomandare/UI/constants.dart';
+import 'package:sistem_de_recomandare/UI/models/TravelSpot.dart';
+import 'package:sistem_de_recomandare/UI/size_config.dart';
 
 class Body extends StatelessWidget {
   @override

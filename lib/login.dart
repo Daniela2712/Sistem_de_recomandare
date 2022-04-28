@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:sistem_de_recomandare/recomandationPage.dart';
-import 'package:sistem_de_recomandare/screens/home/home_screen.dart';
+import 'package:sistem_de_recomandare/UI/screens/home/home_screen.dart';
 const users = const {
   'dribbble@gmail.com': '12345',
   'hunter@gmail.com': 'hunter',

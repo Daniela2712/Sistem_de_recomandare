@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_de_recomandare/size_config.dart';
+import 'package:sistem_de_recomandare/UI/size_config.dart';
 
 import 'home_header.dart';
 import 'popular_places.dart';
@@ -12,6 +12,7 @@ class Body extends StatelessWidget {
     SizeConfig().init(context);
     return SingleChildScrollView(
       clipBehavior: Clip.none,
+
       child: SafeArea(
         top: false,
         child: Column(
@@ -19,8 +20,6 @@ class Body extends StatelessWidget {
             HomeHeader(),
             VerticalSpacing(),
             PopularPlaces(),
-            VerticalSpacing(),
-            TopTravelers(),
             VerticalSpacing(),
           ],
         ),

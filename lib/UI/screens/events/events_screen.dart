@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_de_recomandare/components/app_bar.dart';
-import 'package:sistem_de_recomandare/components/custom_bottom_nav_bar.dart';
+import 'package:sistem_de_recomandare/UI/components/app_bar.dart';
+import 'package:sistem_de_recomandare/UI/components/custom_bottom_nav_bar.dart';
 
 import 'components/body.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_de_recomandare/components/place_card.dart';
-import 'package:sistem_de_recomandare/components/section_title.dart';
-import 'package:sistem_de_recomandare/models/TravelSpot.dart';
+import 'package:sistem_de_recomandare/UI/components/place_card.dart';
+import 'package:sistem_de_recomandare/UI/components/section_title.dart';
+import 'package:sistem_de_recomandare/UI/models/TravelSpot.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
