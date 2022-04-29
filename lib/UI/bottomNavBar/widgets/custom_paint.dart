@@ -11,7 +11,7 @@ class ButtonNotch extends CustomPainter {
       ..color = bgColor
       ..style = PaintingStyle.fill;
     var paint_2 = Paint()
-      ..color = Colors.white
+      ..color = bgColor
       ..style = PaintingStyle.fill;
 
     var path = Path();

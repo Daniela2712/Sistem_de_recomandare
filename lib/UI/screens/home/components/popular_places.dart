@@ -32,6 +32,22 @@ class PopularPlaces extends StatelessWidget {
                       left: getProportionateScreenWidth(kDefaultPadding)),
                   child: PlaceCard(
                     travelSport: travelSpots[index],
+
+                    press: () {},
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: getProportionateScreenWidth(kDefaultPadding),
+              ),
+              ...List.generate(
+                travelSpots.length,
+                    (index) => Padding(
+                  padding: EdgeInsets.only(
+                      left: getProportionateScreenWidth(kDefaultPadding)),
+                  child: PlaceCard(
+                    travelSport: travelSpots[index],
+
                     press: () {},
                   ),
                 ),
@@ -41,6 +57,7 @@ class PopularPlaces extends StatelessWidget {
               ),
             ],
           ),
+
         ),
       ],
     );

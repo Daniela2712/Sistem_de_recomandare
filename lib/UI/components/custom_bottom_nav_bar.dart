@@ -31,7 +31,7 @@ import '../size_config.dart';
   int selectBtn = 0;
   AnimatedContainer navigationBar() {
     return AnimatedContainer(
-      height: 70.0,
+      height: 55.0,
       duration: const Duration(milliseconds: 600),
       decoration: BoxDecoration(
         color: white,
@@ -58,10 +58,10 @@ import '../size_config.dart';
 
   SizedBox iconBtn(int i) {
     bool isActive = selectBtn == i ? true : false;
-    var height = isActive ? 60.0 : 0.0;
-    var width = isActive ? 50.0 : 0.0;
+    var height = isActive ? 80.0 : 0.0;
+    var width = isActive ? 70.0 : 0.0;
     return SizedBox(
-      width: 75.0,
+      width: 35.0,
       child: Stack(
         children: [
           Align(
@@ -89,15 +89,15 @@ import '../size_config.dart';
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Expanded(
-              child: Text(
-              navBtn[i].name,
-              style: isActive ? bntText.copyWith(color: selectColor) : bntText,
-              )
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: Expanded(
+          //     child: Text(
+          //     navBtn[i].name,
+          //     style: isActive ? bntText.copyWith(color: selectColor) : bntText,
+          //     )
+          //   ),
+          // ),
         ],
       ),
     );

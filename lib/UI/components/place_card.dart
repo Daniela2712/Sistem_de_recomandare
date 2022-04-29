@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_de_recomandare/UI/models/User.dart';
 import '../size_config.dart';
@@ -6,12 +7,18 @@ import '../constants.dart';
 import '../models/TravelSpot.dart';
 
 class PlaceCard extends StatelessWidget {
-  const PlaceCard({
+   PlaceCard({
     Key key,
     @required this.travelSport,
     this.isFullCard = false,
     @required this.press,
   }) : super(key: key);
+
+  double _userRating = 3.4;
+  double _initialRating = 2.0;
+  bool _isVertical = false;
+
+  IconData _selectedIcon;
 
   final TravelSpot travelSport;
   final bool isFullCard;
@@ -60,22 +67,21 @@ class PlaceCard extends StatelessWidget {
                   ),
                 ),
                 if (isFullCard)
-                  Text(
-                    travelSport.date.day.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline4
-                        .copyWith(fontWeight: FontWeight.bold),
+
+                SizedBox(height: 40.0),
+                RatingBarIndicator(
+                  rating: _userRating,
+                  itemBuilder: (context, index) => Icon(
+                    _selectedIcon ?? Icons.star,
+                    color: Colors.amber,
                   ),
-                if (isFullCard)
-                  Text(
-                    DateFormat.MMMM().format(travelSport.date) +
-                        " " +
-                        travelSport.date.year.toString(),
-                  ),
+                  itemCount: 5,
+                  itemSize: 16.0,
+                  unratedColor: Colors.amber.withAlpha(60),
+                  direction: _isVertical ? Axis.vertical : Axis.horizontal,
+                ),
                 VerticalSpacing(of: 10),
                 Travelers(
-                  users: travelSport.users,
                 ),
               ],
             ),
@@ -89,32 +95,19 @@ class PlaceCard extends StatelessWidget {
 class Travelers extends StatelessWidget {
   const Travelers({
     Key key,
-    @required this.users,
   }) : super(key: key);
 
-  final List<User> users;
 
   @override
   Widget build(BuildContext context) {
-    int totalUser = 0;
     return SizedBox(
       width: double.infinity,
       height: getProportionateScreenWidth(30),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          ...List.generate(
-            users.length,
-                (index) {
-              totalUser++;
-              return Positioned(
-                left: (22 * index).toDouble(),
-                child: buildTravelerFace(index),
-              );
-            },
-          ),
+
           Positioned(
-            left: (22 * totalUser).toDouble(),
             child: Container(
               height: getProportionateScreenWidth(28),
               width: getProportionateScreenWidth(28),
@@ -122,21 +115,10 @@ class Travelers extends StatelessWidget {
                 color: kPrimaryColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(Icons.add, color: Colors.white),
+              child: Text("Details"),
             ),
           )
         ],
-      ),
-    );
-  }
-
-  ClipOval buildTravelerFace(int index) {
-    return ClipOval(
-      child: Image.asset(
-        users[index].image,
-        height: getProportionateScreenWidth(28),
-        width: getProportionateScreenWidth(28),
-        fit: BoxFit.cover,
       ),
     );
   }

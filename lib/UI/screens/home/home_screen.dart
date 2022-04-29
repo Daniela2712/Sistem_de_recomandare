@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:sistem_de_recomandare/UI/components/app_bar.dart';
 import 'package:sistem_de_recomandare/UI/components/custom_bottom_nav_bar.dart';
 import 'package:sistem_de_recomandare/UI/screens/home/components/body.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../constants.dart';
+import '../user_profile/pages/profile_page.dart';
 
 class HomeScreen extends StatelessWidget {
+
   bool isTransparent = true;
   String title;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -94,7 +97,9 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: ClipOval(child: Image.asset("assets/images/profile.png")),
-            onPressed: () {},
+            onPressed: () {
+              navigateToNextActivity(context);
+            },
           )
         ],
       ),
@@ -102,6 +107,14 @@ class HomeScreen extends StatelessWidget {
       body: Body(),
 
       bottomNavigationBar: CustomBottonNavBar(),
+    );
+  }
+  navigateToNextActivity(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => ProfilePage()
+
+        )
     );
   }
 }

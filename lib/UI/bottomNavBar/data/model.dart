@@ -12,6 +12,8 @@ class Model {
 
 List<Model> navBtn = [
   Model(id: 0, imagePath: 'assets/icons/home.png', name: 'Home'),
-  Model(id: 1, imagePath: 'assets/icons/search.png', name: 'Search'),
-  Model(id: 4, imagePath: 'assets/icons/user.png', name: 'Profile'),
+  Model(id: 1, imagePath: 'assets/icons/favorite.png', name: 'Favorite'),
+  Model(id: 2, imagePath: 'assets/icons/destination.png', name: 'Travel'),
+  Model(id: 3, imagePath: 'assets/icons/planner.png', name: 'MyTrip'),
+
 ];
