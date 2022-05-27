@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
 
+import '../nodeClass.dart';
+
 class Transit {
   String id;
   String origin;
@@ -121,7 +123,7 @@ class TronsonRouteApiProviderForTransit {
         cost=175;
       }
     }
-    print(cost);
+   // print(cost);
     return cost;
   }
 
@@ -149,18 +151,18 @@ class TronsonRouteApiProviderForTransit {
         "country": "Romania",
         "iataCode": "IAS",
       },
-      {
+       {
         "name": "Oradea International Airport",
         "city": "Oradea",
         "country": "Romania",
         "iataCode": "OMR",
       },
-      {
-        "name": "Sibiu International Airport",
-        "city": "Sibiu",
-        "country": "Romania",
-        "iataCode": "SBZ",
-      },
+      // {
+      //   "name": "Sibiu International Airport",
+      //   "city": "Sibiu",
+      //   "country": "Romania",
+      //   "iataCode": "SBZ",
+      // },
       {
         "name": "Transilvania Targu Mureș Airport",
         "city": "Targu Mures",
@@ -184,9 +186,9 @@ class TronsonRouteApiProviderForTransit {
       int count=0;
       final distanceTo = await getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
           origin, romaniaAirportsMap[i]["name"]);
-      print("====================================");
-        print(distanceTo);
-      print("====================================");
+      // print("====================================");
+      //   print(distanceTo);
+      // print("====================================");
       for (int j = 0; j < distanceTo.length; j++) {
         stepsToAirport = [];
         var intStrDist = distanceTo[j].distance.replaceAll(
@@ -203,23 +205,23 @@ class TronsonRouteApiProviderForTransit {
 
       }
       counter.add(distanceTo.length);
-      print("************************************");
-      print(tronsonToAirport);
-      print("************************************");
+      // print("************************************");
+      // print(tronsonToAirport);
+      // print("************************************");
       totalDetailsVector.add(tronsonToAirport);
     }
-    print(totalDetailsVector);
-    print("-----------------------");
-    for (int i = 0; i < romaniaAirportsMap.length; i++) {
-      for (int j = 0; j < counter[i]; j++) {
-        for (int k = 0; k < 5; k++) {
-          if(totalDetailsVector[i][j][k] !=null) {
-            print(totalDetailsVector[i][j][k]);
-          }
-        }
-      }
-      print("-----------------------");
-    }
+   // print(totalDetailsVector);
+    // print("-----------------------");
+    // for (int i = 0; i < romaniaAirportsMap.length; i++) {
+    //   for (int j = 0; j < counter[i]; j++) {
+    //     for (int k = 0; k < 5; k++) {
+    //       if(totalDetailsVector[i][j][k] !=null) {
+    //         print(totalDetailsVector[i][j][k]);
+    //       }
+    //     }
+    //   }
+    //   print("-----------------------");
+    // }
 
     return totalDetailsVector ;
   }
@@ -236,8 +238,11 @@ class TronsonRouteApiProviderForTransit {
     if (results.statusCode == 200) {
       final result = json.decode(results.body);
       if (result['status'] == 'OK') {
-        final components =
-        result['routes'] as List<dynamic>;
+
+        List<Node> trainNodes = [];
+        Node n = new Node();
+
+        final components = result['routes'] as List<dynamic>;
         components.forEach((c) {
           final leg = c['legs'] as List<dynamic>;
           leg.forEach((d) {
@@ -246,13 +251,16 @@ class TronsonRouteApiProviderForTransit {
             }
             if (d['distance'] != null) {
               transit.distance = d['distance']['text'].toString();
-              print(transit.distance);
-              //transit.cost = tronsonCostWithTrain(transit.distance, ).toString();
-              transit.origin = origin;
-              transit.destination = destination;
-              transit.cost=0.toString();
-
             }
+            transit.origin = origin;
+            transit.destination = destination;
+            transit.cost="0.0";
+
+            n.origin=transit.origin.toString();
+            n.destination=transit.destination.toString();
+            n.distance=transit.distance.toString();
+            n.duration=transit.duration.toString();
+
             if (d['arrival_time'] != null) {
               transit.arrival_time=d['arrival_time']['value'].toString();
             }
@@ -266,23 +274,18 @@ class TronsonRouteApiProviderForTransit {
               transit.arrival_location=d['end_address'].toString();
             }
             if (d['steps'] != null) {
-            final steps = d['steps'] as List<dynamic>;
-            print(steps);
-            steps.forEach((e) {
+            final stepsL = d['steps'] as List<dynamic>;
+            stepsL.forEach((e) {
               var step = Transit();
-              print("dsdfsdfsdfsdfsfsdf");
-             print(e['distance']);
               if (e['distance']!= null) {
                 step.distance = e['distance']['text'];
               }
-              print(step.distance);
               if (e['duration'] != null) {
                 step.duration = e['duration']['text'];
               }
               if (e['html_instructions'] != null) {
                 step.departure_train = e['html_instructions'];
               }
-
               if (e['transit_details'] != null) {
                 step.departure_location =
                     e['transit_details']['departure_stop']['name'].toString();
@@ -316,20 +319,56 @@ class TronsonRouteApiProviderForTransit {
                   }
                 });
                 step.cost=tronsonCostWithTrain(step.distance, step.train_type).toString();
-                // print("COOOOOOOSSSSSSTTTTTT");
-                // print(step.cost);
+                if(step.cost==null) {
+                  step.cost = "0.0";
+                }
               }
               step.origin=step.departure_location;
               step.destination=step.arrival_location;
               stepList.add(step);
+             //  Node n = new Node();
+             //  n.weight="0.0".toString();
+             //  // print( "daaaaaaaaaaaaaaaaaaaa");
+             //  // print(step.departure_location.toString());
+             //  n.origin=step.departure_location.toString();
+             //  n.destination=step.arrival_location.toString();
+             //  n.duration=step.duration.toString();
+             //  n.distance=step.distance.toString();
+             //  if(step.cost != null)
+             //    n.cost=step.cost.toString();
+             //  else
+             //    n.cost="0.0";
+             // //n.cost=step.cost.toString();
+             //  n.departure_time=step.departure_time.toString();
+             //  n.arrival_time=step.arrival_time.toString();
+             //  n.departure_location=step.departure_location.toString();
+             //  n.arrival_location=step.arrival_location.toString();
+             //  n.train_type=step.train_type.toString();
+             //  n.departure_train=step.departure_train.toString();
+             //  n.agencies_name=step.agencies_name.toString();
+             //  n.stops_number=step.stops_number.toString();
+
+              if(step.cost.toString() == "null") {
+                step.cost="0.0";
+              }
+                transit.cost =
+                    (double.parse(transit.cost) + double.parse(step.cost))
+                        .toString();
+
             });
+            n.efort=stepsL.length.toString();
+
             }
 
+
           });
+          n.cost=transit.cost.toString();
+          n.weight=NodeCalc().calcWeight(n).toString();
+          trainNodes.add(n);
         });
-        print("SSSSSSSSSSSSSSSSSSSSSSSSS");
+        print(trainNodes);
         stepList.add(transit);
-        print(stepList);
+        //print(stepList);
       } else {
         throw Exception('Failed to fetch suggestion');
       }

@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
 import 'package:geocoding/geocoding.dart' as geolocator;
 import 'package:sistem_de_recomandare/travel_service.dart';
-import 'package:sistem_de_recomandare/tronson_service.dart';
+import 'package:sistem_de_recomandare/service/tronson_service.dart';
 
 class BestTransit {
   String id;

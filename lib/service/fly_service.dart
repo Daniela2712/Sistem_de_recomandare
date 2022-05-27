@@ -5,6 +5,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
 import 'package:sistem_de_recomandare/travel_service.dart';
 
+import '../nodeClass.dart';
+
 
 class Fly {
   String id;
@@ -32,7 +34,7 @@ class Fly {
     this.arrivalTerminal,
     this.departureIataCode,
     this.arrivalIataCode,
-    this.cost
+    this.cost,
   });
 
   @override
@@ -93,7 +95,7 @@ class TronsonRouteApiProviderForFly {
     List<List<String>> tronsonToDest = [];
     List<String> stepsToDest = [];
     List<int> counter = [];
-    print("+++++++++++++++++++++++++++++++++");
+   // print("+++++++++++++++++++++++++++++++++");
     for (int i = 0; i < romaniaAirportsMap.length; i++) {
       tronsonToDest = [];
       int count = 0;
@@ -173,10 +175,12 @@ class TronsonRouteApiProviderForFly {
                 "Authorization": bearerToken,
               });
           final result = json.decode(response.body);
-         // print(result['status']);
-           final components = result['data'] as List<dynamic>;
-            components.forEach((d) {
+         //print(response.body);
 
+
+          List<Node> flyNodes = [];
+          final components = result['data'] as List<dynamic>;
+            components.forEach((d) {
               final itinerComp = d['itineraries'] as List<dynamic>;
               itinerComp.forEach((it) {
                 var fly = Fly();
@@ -184,6 +188,15 @@ class TronsonRouteApiProviderForFly {
                 fly.origin=origin;
                 fly.destination=destination;
                 fly.cost=d['price']['total'].toString();
+                Node n = new Node();
+                n.origin=fly.origin.toString();
+                n.destination=fly.destination.toString();
+                n.duration=fly.duration.toString();
+                n.cost=fly.cost.toString();
+                n.distance="0.0";
+                n.weight=NodeCalc().calcWeight(n).toString();
+                flyNodes.add(n);
+
                 final segComp = it['segments'] as List<dynamic>;
                 segComp.forEach((seg) {
                   var step = Fly();
@@ -204,28 +217,51 @@ class TronsonRouteApiProviderForFly {
                     step.segmentDuration = seg['duration'].toString();
                   }
                   stepList.add(step);
+
+                  // Node n = new Node();
+                  //
+                  // n.origin=step.departureIataCode.toString();
+                  // n.destination=step.arrivalIataCode.toString();
+                  // n.duration=step.segmentDuration.toString();
+                  // n.departure_time=step.departureTime.toString();
+                  // n.arrival_time=step.arrivalTime.toString();
+                  // n.departure_location=step.departureIataCode.toString();
+                  // n.arrival_location=step.arrivalIataCode.toString();
+                  // n.departureTerminal=step.departureTerminal.toString();
+                  // n.arrivalTerminal=step.arrivalTerminal.toString();
+                  //
+                  // flyNodes.add(n);
+
                 });
-               // stepList.add(fly);
-                stepList.add(fly);
+
+                // stepList.add(fly);
+                //stepList.add(fly);
                 itinerariesList.add(stepList);
                 //print(itinerariesList);
+                // print("---------------------------------------");
+                // print(stepList);
+                // print("---------------------------------------");
+
+                n.efort=segComp.length.toString();
               });
               dataList.add(itinerariesList);
             });
+          print(flyNodes);
 
-          } else {
+
+        } else {
             throw Exception('Failed to fetch suggestion');
 
         }
       } catch (e) {
         print(e.toString());
       }
-      for(int i=0;i<stepList.length;i++) {
-        print("---------------------------------");
-        print(stepList[i]);
-        print("---------------------------------");
-      }
-      //print(dataList);
+      // for(int i=0;i<stepList.length;i++) {
+      //   print("---------------------------------");
+      //   print(stepList[i]);
+      //   print("---------------------------------");
+      // }
+     // print(dataList);
       return itinerariesList;
     }
   }

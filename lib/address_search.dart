@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_de_recomandare/place_service.dart';
+import 'package:sistem_de_recomandare/service/place_service.dart';
 
 class AddressSearch extends SearchDelegate<Suggestion> {
   AddressSearch(this.sessionToken) {

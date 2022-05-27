@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
 
+import '../nodeClass.dart';
 import 'bestTransit_service.dart';
 
 
@@ -31,10 +32,10 @@ class Tronson {
 }
 
 
-class TronsonRouteApiProvider {
+class TronsonRouteApiProviderWithCar {
   final client = Client();
 
-  TronsonRouteApiProvider();
+  TronsonRouteApiProviderWithCar();
 
   final directionsApiKey = 'AIzaSyDK2iXHr9XwtIdTIQU9IkBETIM5ivg9PaY';
 
@@ -43,7 +44,7 @@ class TronsonRouteApiProvider {
     var carburantCost = 7; // 7 lei per litre
     String distanceConverted=distance.replaceAll("km", "").trim();
     double cost = (consum / 100) * double.parse(distanceConverted) * carburantCost;
-    print(cost);
+   // print(cost);
     return cost;
   }
 
@@ -116,17 +117,20 @@ class TronsonRouteApiProvider {
       tronsonToAirport.add(distanceTo.origin);
       tronsonToAirport.add(distanceTo.destination);
 
-      totalDetailsVector.add(tronsonToAirport);
-    }
-    print("-----------------------");
-    for (int i = 0; i < totalDetailsVector.length; i++) {
-      for (int j = 0; j < 5; j++) {
-        print(totalDetailsVector[i][j]);
-      }
-      print("-----------------------");
+      //totalDetailsVector.add(tronsonToAirport);
     }
 
-    return totalDetailsVector ;
+
+    // print("-----------------------");
+    // for (int i = 0; i < totalDetailsVector.length; i++) {
+    //   for (int j = 0; j < 5; j++) {
+    //     print(totalDetailsVector[i][j]);
+    //print(carNodes);
+    //   }
+    //   print("-----------------------");
+    //}
+
+    return totalDetailsVector;
   }
 
 
@@ -157,6 +161,30 @@ class TronsonRouteApiProvider {
             }
           });
         });
+        List<Node> carNodes = [];
+        Node n = new Node();
+        if(tronson.origin != null)
+          n.origin=tronson.origin.toString();
+        if(tronson.destination != null)
+          n.destination=tronson.destination.toString();
+        if(tronson.duration != null)
+          n.duration=tronson.duration.toString();
+        else
+          n.duration="0";
+        if(tronson.distance != null)
+          n.distance=tronson.distance.toString();
+        else
+          n.distance="0";
+        if(tronson.cost != null)
+          n.cost=tronson.cost.toString();
+        else
+          n.cost="0";
+
+        n.weight=NodeCalc().calcWeight(n).toString();
+        n.efort=(double.parse(tronson.distance.replaceAll(
+            new RegExp(r'[^0-9,.]'), ''))/100).round().toString();
+        carNodes.add(n);
+        print(carNodes);
       } else {
         throw Exception('Failed to fetch suggestion');
       }
@@ -172,8 +200,8 @@ class TronsonRouteApiProvider {
 
     var latitude = location[0].latitude;
     var longitude = location[0].longitude;
-    print(latitude);
-    print(longitude);
+    // print(latitude);
+    // print(longitude);
     var nearestAirportUrl = "https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=$latitude&longitude=$longitude&radius=500&page%5Blimit%5D=3&page%5Boffset%5D=0&sort=distance";
     var airportName;
     var iataCode;
@@ -190,19 +218,19 @@ class TronsonRouteApiProvider {
       },
     );
     //https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=$latitude&longitude=$longitude&radius=500&page%5Blimit%5D=3&page%5Boffset%5D=0&sort=distance
-    print(secResponse);
+   // print(secResponse);
     if (secResponse.statusCode == 200) {
       try {
-        print(secResponse.body);
+        //print(secResponse.body);
         var security = jsonDecode(secResponse.body);
-        print(security);
+        //print(security);
         if (security != null) {
           var tokenType = security['token_type'];
-          print(tokenType);
-          print(security['access_token']);
+         // print(tokenType);
+         // print(security['access_token']);
           var token = security['access_token'];
           var bearerToken = '$tokenType ' + '$token';
-          print("token: " + bearerToken);
+         // print("token: " + bearerToken);
           var response = await client.get(Uri.parse(
               nearestAirportUrl),
               headers: {
@@ -210,13 +238,13 @@ class TronsonRouteApiProvider {
 
               });
           final result = json.decode(response.body);
-          print(result);
+          //print(result);
           if (result['status'] == 'OK') {
             final components = result['data'] as List<dynamic>;
-            print(components);
+           // print(components);
             airportName = result['data']['name'];
             iataCode = result['data']['iataCode'];
-            print(components);
+           // print(components);
             components.forEach((c) {
               cityCode = c['adress']['cityCode'];
               distanceAirFromOr = c['distance']['value'];
@@ -232,7 +260,7 @@ class TronsonRouteApiProvider {
       } catch (e) {
         print(e.toString());
       }
-      print(nearestAirDetails);
+     // print(nearestAirDetails);
       return nearestAirDetails;
     }
   }

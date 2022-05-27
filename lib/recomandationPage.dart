@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:sistem_de_recomandare/airport_service.dart';
-import 'package:sistem_de_recomandare/transit_service.dart';
-import 'package:sistem_de_recomandare/tronson_service.dart';
+import 'package:sistem_de_recomandare/service/airport_service.dart';
+import 'package:sistem_de_recomandare/httpTest.dart';
+import 'package:sistem_de_recomandare/service/drive_service.dart';
+import 'package:sistem_de_recomandare/service/transit_service.dart';
+import 'package:sistem_de_recomandare/service/tronson_service.dart';
 import 'package:uuid/uuid.dart';
 
-import 'activities_service.dart';
-import 'bestTransit_service.dart';
+import 'service/activities_service.dart';
+import 'service/bestTransit_service.dart';
 import 'dropdown.dart';
-import 'fly_service.dart';
-import 'hotel_service.dart';
+import 'service/fly_service.dart';
+import 'service/hotel_service.dart';
 import 'model/database_manager.dart';
 import 'model/service_locator.dart';
 
@@ -52,10 +54,15 @@ class _UserFormState extends State<UserForm> {
           //,"London",userTravelDetails['buget'],userTravelDetails['NumberOfPersons'],userTravelDetails['destinationType'],userTravelDetails['travelMode']);
      // print(userTravelDetails.toString());
       //HotelApiProvider().getDestinationHotelDetail("MAD");
-      ActivitiesProviderApi().getActivitiesForMultipleHotelDestinations("MAD");
+      //ActivitiesProviderApi().getActivitiesForMultipleHotelDestinations("MAD");
+     // httpService().postServerInfo();
+      //TronsonRouteApiProviderForFly().getRouteDetailFromAirToDestinationWithAir();
+
       //TronsonRouteApiProviderForFly().getRouteDetailFromAirToDestinationWithAir("MAD");
       //ActivitiesProviderApi().getActivitiesListFromDestinationInternet("Barcelona");
-      //TronsonRouteApiProviderForTransit().getRouteDetailToRomanianAirportWithTrain("Brasov");
+      TronsonRouteApiProviderForTransit().getRouteDetailToRomanianAirportWithTrain("Brasov");
+      //TronsonRouteApiProviderForTransit().getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet("Brasov", "Sibiu International Airport");
+      //TronsonRouteApiProviderWithCar().getRouteDetailToRomanianAirportWithCar("Brasov");
       // If the form passes validation, display a Snackbar.
       // Scaffold.of(context)
       //     .showSnackBar(SnackBar(content: Text('Registration sent')));

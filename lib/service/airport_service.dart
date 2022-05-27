@@ -5,9 +5,9 @@ import 'dart:math';
 import 'package:geocoding/geocoding.dart';
 import 'package:sistem_de_recomandare/model/service_locator.dart';
 import 'package:sistem_de_recomandare/travel_service.dart';
-import 'package:sistem_de_recomandare/tronson_service.dart' as tronson;
-import 'package:sistem_de_recomandare/tronson_service.dart';
-import 'model/database_manager.dart';
+import 'package:sistem_de_recomandare/service/tronson_service.dart' as tronson;
+import 'package:sistem_de_recomandare/service/tronson_service.dart';
+import 'package:sistem_de_recomandare/model/database_manager.dart';
 import 'package:geocoding/geocoding.dart' as geolocator;
 
 class Airport {

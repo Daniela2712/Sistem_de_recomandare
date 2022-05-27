@@ -13,16 +13,16 @@ dependencies:
     sdk: flutter
   flutter_google_places: ^0.3.0
   geocode: ^1.0.1
-  uuid: 3.0.5
+  uuid: ^3.0.6
   dio: ^4.0.0
   google_maps_flutter: ^2.0.2
-  cupertino_icons: 1.0.0
+  cupertino_icons: ^1.0.4
   firebase_core: ^1.10.0
   cloud_firestore: ^3.1.0
   get_it: ^7.2.0
   moor_flutter: ^4.0.0
   path_provider: ^2.0.8
-  sqlite3_flutter_libs: ^0.4.2
+  sqlite3_flutter_libs: ^0.5.7
   geocoding: ^2.0.2
   amadeus_flutter: ^0.0.1+1
   intl: ^0.17.0
@@ -37,6 +37,8 @@ dependencies:
     # Allow us to use .svg file
   flutter_svg: ^1.0.0
   flutter_rating_bar: ^4.0.0
+  http: ^0.13.4
+  html: ^0.15.0
 
 dev_dependencies:
   flutter_test:
