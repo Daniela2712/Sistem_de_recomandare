@@ -44,7 +44,7 @@ class Fly {
 }
 class TronsonRouteApiProviderForFly {
 
-  Future<List<List<List<String>>>> getRouteDetailFromAirToDestinationWithAir(
+  Future<List<Node>> getRouteDetailFromAirToDestinationWithAir(
       String destination) async {
     List romaniaAirportsMap = [
       {
@@ -93,32 +93,32 @@ class TronsonRouteApiProviderForFly {
 
     List<List<List<String>>> totalDetailsVector = [];
     List<List<String>> tronsonToDest = [];
-    List<String> stepsToDest = [];
+    List<Node> nodeDetails = [];
     List<int> counter = [];
-   // print("+++++++++++++++++++++++++++++++++");
-    for (int i = 0; i < romaniaAirportsMap.length; i++) {
+    //print("+++++++++++++++++++++++++++++++++");
+    for (int i = 0; i < romaniaAirportsMap?.length; i++) {
       tronsonToDest = [];
       int count = 0;
-      final distanceTo = await getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(
+      final flyNodes = await getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(
           romaniaAirportsMap[i]["iataCode"], destination);
-      for (int j = 0; j < distanceTo.length; j++){
-        // print("====================================");
-        // print(distanceTo);
-        // print("====================================");
-    }
-      for (int j = 0; j < distanceTo.length; j++) {
-        //print("itinerar: "+ j.toString());
-        for (int k = 0; k < distanceTo[j].length; k++) {
+      //   for (int j = 0; j < distanceTo.length; j++){
+      //  print("====================================");
+      //  print(flyNodes);
+      //  print("====================================");
+      // }
+      //print(flyNodes);
+      for (int j = 0; j < flyNodes.length; j++) {
+          nodeDetails.add(flyNodes[j]);
             // print("step: "+ k.toString());
             // print("====================================");
             // print(distanceTo[j][k]);
             // print("====================================");
-            tronsonToDest.add(stepsToDest);
+            // tronsonToDest.add(stepsToDest);
           }
-          //counter.add(distanceTo[j].length);
-        }
-      }
-      totalDetailsVector.add(tronsonToDest);
+      //counter.add(distanceTo[j].length);
+    }
+    //}
+    //totalDetailsVector.add(tronsonToDest);
 
 
     // print(totalDetailsVector);
@@ -135,12 +135,12 @@ class TronsonRouteApiProviderForFly {
     //   }
     //   print("-----------------------");
     // }
-
-    return totalDetailsVector;
+   // print(nodeDetails);
+    return nodeDetails;
   }
 
 
-  Future<List<List<Fly>>> getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(
+  Future<List<Node>> getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(
       String origin,
       String destination,) async {
     var airUrl = "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=$origin&destinationLocationCode=$destination&departureDate=2022-11-10&adults=3&nonStop=false&max=5";
@@ -153,104 +153,111 @@ class TronsonRouteApiProviderForFly {
         "client_secret": "rIJW2hknmn7g4o5w",
       },
     );
-  //  print(resultsFlights);
+    //print("resultsFlights");
     List<List<List<Fly>>> dataList = [];
     List<List<Fly>> itinerariesList = [];
     List<Fly> stepList = [];
+    List<Node> flyNodes = [];
+
+
     if (resultsFlights.statusCode == 200) {
+
       try {
-       // print(resultsFlights.body);
+        // print(resultsFlights.body);
         var security = jsonDecode(resultsFlights.body);
 
-       // print(security);
+        // print(security);
         if (security != null) {
           var tokenType = security['token_type'];
-         // print(tokenType);
-         // print(security['access_token']);
+          // print(tokenType);
+          // print(security['access_token']);
           var token = security['access_token'];
           var bearerToken = '$tokenType ' + '$token';
-         // print("token: " + bearerToken);
+          // print("token: " + bearerToken);
           var response = await client.get(Uri.parse(airUrl),
               headers: {
                 "Authorization": bearerToken,
               });
           final result = json.decode(response.body);
-         //print(response.body);
+          //print(response.body);
 
-
-          List<Node> flyNodes = [];
           final components = result['data'] as List<dynamic>;
-            components.forEach((d) {
-              final itinerComp = d['itineraries'] as List<dynamic>;
-              itinerComp.forEach((it) {
-                var fly = Fly();
-                fly.duration = it['duration'].toString();
-                fly.origin=origin;
-                fly.destination=destination;
-                fly.cost=d['price']['total'].toString();
-                Node n = new Node();
-                n.origin=fly.origin.toString();
-                n.destination=fly.destination.toString();
-                n.duration=fly.duration.toString();
-                n.cost=fly.cost.toString();
-                n.distance="0.0";
-                n.weight=NodeCalc().calcWeight(n).toString();
-                flyNodes.add(n);
+          components.forEach((d) {
+            final itinerComp = d['itineraries'] as List<dynamic>;
+            itinerComp.forEach((it) {
 
-                final segComp = it['segments'] as List<dynamic>;
-                segComp.forEach((seg) {
-                  var step = Fly();
-                 // print(seg['departure']);
-                  if (seg['departure'] != null) {
-                    step.departureIataCode = seg['departure']['iataCode'].toString();
-                    step.departureTime = seg['departure']['at'].toString();
-                    step.departureTerminal = seg['departure']['terminal'];
-                    step.origin=step.departureIataCode;
-                  }
-                  if (seg['arrival'] != null) {
-                    step.arrivalIataCode = seg['arrival']['iataCode'].toString();
-                    step.arrivalTime = seg['arrival']['at'].toString();
-                    step.arrivalTerminal = seg['arrival']['terminal'].toString();
-                    step.destination=step.arrivalIataCode;
-                  }
-                  if (seg['duration'] != null) {
-                    step.segmentDuration = seg['duration'].toString();
-                  }
-                  stepList.add(step);
+              var fly = Fly();
+              Node n = new Node();
+              fly.duration = it['duration']?.toString();
+              fly.origin=origin;
+              fly.destination=destination;
+              fly.cost=d['price']['total']?.toString();
 
-                  // Node n = new Node();
-                  //
-                  // n.origin=step.departureIataCode.toString();
-                  // n.destination=step.arrivalIataCode.toString();
-                  // n.duration=step.segmentDuration.toString();
-                  // n.departure_time=step.departureTime.toString();
-                  // n.arrival_time=step.arrivalTime.toString();
-                  // n.departure_location=step.departureIataCode.toString();
-                  // n.arrival_location=step.arrivalIataCode.toString();
-                  // n.departureTerminal=step.departureTerminal.toString();
-                  // n.arrivalTerminal=step.arrivalTerminal.toString();
-                  //
-                  // flyNodes.add(n);
+              n.origin=fly.origin.toString();
+              n.destination=fly.destination?.toString();
+              n.duration=fly.duration?.toString();
+              n.cost=fly.cost?.toString();
+              n.distance="0.0";
 
-                });
+              final segComp = it['segments'] as List<dynamic>;
+              segComp.forEach((seg) {
+                var step = Fly();
+                // print(seg['departure']);
+                if (seg['departure'] != null) {
+                  step.departureIataCode = seg['departure']['iataCode']?.toString();
+                  step.departureTime = seg['departure']['at']?.toString();
+                  step.departureTerminal = seg['departure']['terminal']?.toString();
+                  step.origin=step.departureIataCode;
+                }
+                if (seg['arrival'] != null) {
+                  step.arrivalIataCode = seg['arrival']['iataCode']?.toString();
+                  step.arrivalTime = seg['arrival']['at']?.toString();
+                  step.arrivalTerminal = seg['arrival']['terminal']?.toString();
+                  step.destination=step.arrivalIataCode;
+                }
+                if (seg['duration'] != null) {
+                  step.segmentDuration = seg['duration']?.toString();
+                }
+                stepList.add(step);
 
-                // stepList.add(fly);
-                //stepList.add(fly);
-                itinerariesList.add(stepList);
-                //print(itinerariesList);
-                // print("---------------------------------------");
-                // print(stepList);
-                // print("---------------------------------------");
+                // Node n = new Node();
+                //
+                // n.origin=step.departureIataCode.toString();
+                // n.destination=step.arrivalIataCode.toString();
+                // n.duration=step.segmentDuration.toString();
+                // n.departure_time=step.departureTime.toString();
+                // n.arrival_time=step.arrivalTime.toString();
+                // n.departure_location=step.departureIataCode.toString();
+                // n.arrival_location=step.arrivalIataCode.toString();
+                // n.departureTerminal=step.departureTerminal.toString();
+                // n.arrivalTerminal=step.arrivalTerminal.toString();
+                //
+                // flyNodes.add(n);
 
-                n.efort=segComp.length.toString();
               });
-              dataList.add(itinerariesList);
+
+              stepList.add(fly);
+              //stepList.add(fly);
+              itinerariesList.add(stepList);
+              // print(itinerariesList);
+              // print("---------------------------------------");
+              // print(stepList);
+              // print("---------------------------------------");
+
+             n.efort=segComp?.length?.toString();
+             n.weight=NodeCalc().calcWeight(n)?.toString();
+             flyNodes.add(n);
+              // print("---------------------------------------");
+              // print(flyNodes);
+              // print("---------------------------------------");
             });
-          print(flyNodes);
+            dataList.add(itinerariesList);
+          });
+         // print(flyNodes);
 
 
         } else {
-            throw Exception('Failed to fetch suggestion');
+          throw Exception('Failed to fetch suggestion');
 
         }
       } catch (e) {
@@ -261,8 +268,9 @@ class TronsonRouteApiProviderForFly {
       //   print(stepList[i]);
       //   print("---------------------------------");
       // }
-     // print(dataList);
-      return itinerariesList;
+      // print(dataList);
+
+      return flyNodes;
     }
   }
 }

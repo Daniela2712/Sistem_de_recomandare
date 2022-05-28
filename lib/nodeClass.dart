@@ -75,9 +75,8 @@ class NodeCalc{
     // print(node.distance);
     // print(node.duration);
     // print(node.cost);
-    sum=double.parse(node.cost)*0.5+double.parse(node.duration.replaceAll(
-        new RegExp(r'[^0-9,.]'), ''))*0.35+(double.parse(node.distance.replaceAll(
-        new RegExp(r'[^0-9,.]'), ''))/100).round()*0.15;
+    sum=double.parse(node.cost)*0.5+double.parse(node.duration?.replaceAll(
+        new RegExp(r'[^0-9,.]'), ''))*0.35+double.parse(node.efort)*0.15;
     return sum;
   }
 

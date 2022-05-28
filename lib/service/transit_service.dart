@@ -48,10 +48,10 @@ class Transit {
 }
 
 
-class TronsonRouteApiProviderForTransit {
+class TronsonRouteApiProviderWithTransit {
   final client = Client();
 
-  TronsonRouteApiProviderForTransit();
+  TronsonRouteApiProviderWithTransit();
 
   final directionsApiKey = 'AIzaSyDK2iXHr9XwtIdTIQU9IkBETIM5ivg9PaY';
 
@@ -131,7 +131,7 @@ class TronsonRouteApiProviderForTransit {
   //xl........1km
   //x=6*1/100=0.06l
 
-  Future<List<List<List<String>>>> getRouteDetailToRomanianAirportWithTrain(String origin) async {
+  Future<List<Node>> getRouteDetailToRomanianAirportWithTrain(String origin) async {
     List romaniaAirportsMap = [
       {
         "name": "Henri Coanda International Airport",
@@ -179,55 +179,56 @@ class TronsonRouteApiProviderForTransit {
 
     List<List<List<String>>> totalDetailsVector = [];
     List<List<String>> tronsonToAirport = [];
-    List<String> stepsToAirport = [];
-    List<int> counter = [];
+    List<Node> nodeDetails = [];
+
     for (int i = 0; i < romaniaAirportsMap.length; i++) {
-      tronsonToAirport = [];
-      int count=0;
-      final distanceTo = await getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
+      // tronsonToAirport = [];
+      final trainNodes =
+      await getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
           origin, romaniaAirportsMap[i]["name"]);
+      nodeDetails.add(trainNodes[0]);
       // print("====================================");
       //   print(distanceTo);
       // print("====================================");
-      for (int j = 0; j < distanceTo.length; j++) {
-        stepsToAirport = [];
-        var intStrDist = distanceTo[j].distance.replaceAll(
-            new RegExp(r'[^0-9,.]'), '');
-        var intStrDur = distanceTo[j].duration.replaceAll(
-            new RegExp(r'[^0-9,.]'), '');
+      // for (int j = 0; j < distanceTo.length; j++) {
+      // stepsToAirport = [];
+      //  var intStrDist = distanceTo[j].distance.replaceAll(
+      //      new RegExp(r'[^0-9,.]'), '');
+      //  var intStrDur = distanceTo[j].duration.replaceAll(
+      //      new RegExp(r'[^0-9,.]'), '');
+      //
+      //  stepsToAirport.add(intStrDist);
+      //  stepsToAirport.add(intStrDur);
+      //  stepsToAirport.add(distanceTo[j].cost.toString());
+      //  stepsToAirport.add(distanceTo[j].origin);
+      //  stepsToAirport.add(distanceTo[j].destination);
+      //  tronsonToAirport.add(stepsToAirport);
 
-        stepsToAirport.add(intStrDist);
-        stepsToAirport.add(intStrDur);
-        stepsToAirport.add(distanceTo[j].cost.toString());
-        stepsToAirport.add(distanceTo[j].origin);
-        stepsToAirport.add(distanceTo[j].destination);
-        tronsonToAirport.add(stepsToAirport);
-
-      }
-      counter.add(distanceTo.length);
+      // }
+      //counter.add(distanceTo.length);
       // print("************************************");
       // print(tronsonToAirport);
       // print("************************************");
-      totalDetailsVector.add(tronsonToAirport);
+      //   totalDetailsVector.add(tronsonToAirport);
+      // }
+      // print(totalDetailsVector);
+      // print("-----------------------");
+      // for (int i = 0; i < romaniaAirportsMap.length; i++) {
+      //   for (int j = 0; j < counter[i]; j++) {
+      //     for (int k = 0; k < 5; k++) {
+      //       if(totalDetailsVector[i][j][k] !=null) {
+      //         print(totalDetailsVector[i][j][k]);
+      //       }
+      //     }
+      //   }
+      //   print("-----------------------");
+      // }
     }
-   // print(totalDetailsVector);
-    // print("-----------------------");
-    // for (int i = 0; i < romaniaAirportsMap.length; i++) {
-    //   for (int j = 0; j < counter[i]; j++) {
-    //     for (int k = 0; k < 5; k++) {
-    //       if(totalDetailsVector[i][j][k] !=null) {
-    //         print(totalDetailsVector[i][j][k]);
-    //       }
-    //     }
-    //   }
-    //   print("-----------------------");
-    // }
-
-    return totalDetailsVector ;
+    return nodeDetails ;
   }
 
 
-    Future<List<Transit>>getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
+    Future<List<Node>>getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
       String origin,
       String destination
       ) async {
@@ -235,11 +236,12 @@ class TronsonRouteApiProviderForTransit {
     final results = await client.get(Uri.parse(trainUrl));
     var transit = Transit();
     List<Transit> stepList=[];
+    List<Node> trainNodes = [];
+
     if (results.statusCode == 200) {
       final result = json.decode(results.body);
       if (result['status'] == 'OK') {
 
-        List<Node> trainNodes = [];
         Node n = new Node();
 
         final components = result['routes'] as List<dynamic>;
@@ -366,13 +368,13 @@ class TronsonRouteApiProviderForTransit {
           n.weight=NodeCalc().calcWeight(n).toString();
           trainNodes.add(n);
         });
-        print(trainNodes);
+        //print(trainNodes);
         stepList.add(transit);
         //print(stepList);
       } else {
         throw Exception('Failed to fetch suggestion');
       }
     }
-    return stepList;
+    return trainNodes;
   }
 }

@@ -55,12 +55,12 @@ class _UserFormState extends State<UserForm> {
      // print(userTravelDetails.toString());
       //HotelApiProvider().getDestinationHotelDetail("MAD");
       //ActivitiesProviderApi().getActivitiesForMultipleHotelDestinations("MAD");
-     // httpService().postServerInfo();
+      httpService().postServerInfo();
       //TronsonRouteApiProviderForFly().getRouteDetailFromAirToDestinationWithAir();
 
       //TronsonRouteApiProviderForFly().getRouteDetailFromAirToDestinationWithAir("MAD");
       //ActivitiesProviderApi().getActivitiesListFromDestinationInternet("Barcelona");
-      TronsonRouteApiProviderForTransit().getRouteDetailToRomanianAirportWithTrain("Brasov");
+      //TronsonRouteApiProviderForTransit().getRouteDetailToRomanianAirportWithTrain("Brasov");
       //TronsonRouteApiProviderForTransit().getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet("Brasov", "Sibiu International Airport");
       //TronsonRouteApiProviderWithCar().getRouteDetailToRomanianAirportWithCar("Brasov");
       // If the form passes validation, display a Snackbar.

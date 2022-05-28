@@ -52,7 +52,7 @@ class TronsonRouteApiProviderWithCar {
   //xl........1km
   //x=6*1/100=0.06l
 
-  Future<List<List<String>>> getRouteDetailToRomanianAirportWithCar(String origin) async {
+  Future<List<Node>> getRouteDetailToRomanianAirportWithCar(String origin) async {
     List romaniaAirportsMap = [
       {
         "name": "Henri Coanda International Airport",
@@ -98,26 +98,26 @@ class TronsonRouteApiProviderWithCar {
       }
     ];
 
-    List<List<String>> totalDetailsVector = [];
-
+    List<Node> nodeDetails = [];
     for (int i = 0; i < romaniaAirportsMap.length; i++) {
-      List<String> tronsonToAirport = [];
 
-      final distanceTo = await getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(
+      final carNodes = await getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(
           origin, romaniaAirportsMap[i]["name"]);
-      var intStrDist = distanceTo.distance.replaceAll(
-          new RegExp(r'[^0-9,.]'), '');
+      nodeDetails.add(carNodes[0]);
 
-      tronsonToAirport.add(intStrDist);
-      var intStrDur = distanceTo.duration.replaceAll(
-          new RegExp(r'[^0-9,.]'), '');
-
-      tronsonToAirport.add(intStrDur);
-      tronsonToAirport.add(distanceTo.cost.toString());
-      tronsonToAirport.add(distanceTo.origin);
-      tronsonToAirport.add(distanceTo.destination);
-
-      //totalDetailsVector.add(tronsonToAirport);
+      // var intStrDist = distanceTo.distance.replaceAll(
+      //     new RegExp(r'[^0-9,.]'), '');
+      //
+      // tronsonToAirport.add(intStrDist);
+      // var intStrDur = distanceTo.duration.replaceAll(
+      //     new RegExp(r'[^0-9,.]'), '');
+      //
+      // tronsonToAirport.add(intStrDur);
+      // tronsonToAirport.add(distanceTo.cost.toString());
+      // tronsonToAirport.add(distanceTo.origin);
+      // tronsonToAirport.add(distanceTo.destination);
+      //
+      // //totalDetailsVector.add(tronsonToAirport);
     }
 
 
@@ -129,19 +129,21 @@ class TronsonRouteApiProviderWithCar {
     //   }
     //   print("-----------------------");
     //}
-
-    return totalDetailsVector;
+    // print("-----------------------");
+    // print(nodeDetails);
+    // print("-----------------------");
+    return nodeDetails;
   }
 
 
-  Future<Tronson> getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(
+  Future<List<Node>> getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(
       String origin,
       String destination
       ) async {
     var Url = "https://maps.googleapis.com/maps/api/directions/json?origin=$origin &destination=$destination&key=$directionsApiKey";
     final results = await client.get(Uri.parse(Url));
     final tronson = Tronson();
-
+    List<Node> carNodes = [];
     if (results.statusCode == 200) {
       final result = json.decode(results.body);
       if (result['status'] == 'OK') {
@@ -161,7 +163,6 @@ class TronsonRouteApiProviderWithCar {
             }
           });
         });
-        List<Node> carNodes = [];
         Node n = new Node();
         if(tronson.origin != null)
           n.origin=tronson.origin.toString();
@@ -179,17 +180,17 @@ class TronsonRouteApiProviderWithCar {
           n.cost=tronson.cost.toString();
         else
           n.cost="0";
-
-        n.weight=NodeCalc().calcWeight(n).toString();
         n.efort=(double.parse(tronson.distance.replaceAll(
             new RegExp(r'[^0-9,.]'), ''))/100).round().toString();
+        n.weight=NodeCalc().calcWeight(n).toString();
+
         carNodes.add(n);
-        print(carNodes);
+        //print(carNodes);
       } else {
         throw Exception('Failed to fetch suggestion');
       }
     }
-    return tronson;
+    return carNodes;
   }
 
 
