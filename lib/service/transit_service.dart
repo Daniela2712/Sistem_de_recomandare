@@ -57,7 +57,9 @@ class TronsonRouteApiProviderWithTransit {
 
   double tronsonCostWithTrain(String distance, String train_type) {
     double cost;
-    String d=distance.replaceAll("km", "").trim();
+    String d=distance.replaceAll(
+        new RegExp(r'[^0-9]'), '');
+    print("DOUBLEEEEEEEEE $d");
     double dist=double.parse(d);
     if(train_type=='R'){
       if(dist >=1 && dist <=30){
@@ -123,7 +125,6 @@ class TronsonRouteApiProviderWithTransit {
         cost=175;
       }
     }
-   // print(cost);
     return cost;
   }
 
@@ -163,12 +164,12 @@ class TronsonRouteApiProviderWithTransit {
       //   "country": "Romania",
       //   "iataCode": "SBZ",
       // },
-      {
-        "name": "Transilvania Targu Mureș Airport",
-        "city": "Targu Mures",
-        "country": "Romania",
-        "iataCode": "TGM",
-      },
+      // {
+      //   "name": "Transilvania Targu Mureș Airport",
+      //   "city": "Targu Mures",
+      //   "country": "Romania",
+      //   "iataCode": "TGM",
+      // },
       {
         "name": "Timișoara Traian Vuia International Airport",
         "city": "Timisoara",
@@ -176,57 +177,18 @@ class TronsonRouteApiProviderWithTransit {
         "iataCode": "TSR",
       }
     ];
-
-    List<List<List<String>>> totalDetailsVector = [];
-    List<List<String>> tronsonToAirport = [];
     List<Node> nodeDetails = [];
 
     for (int i = 0; i < romaniaAirportsMap.length; i++) {
-      // tronsonToAirport = [];
       final trainNodes =
       await getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
           origin, romaniaAirportsMap[i]["name"]);
+      trainNodes[0].length=trainNodes.length.toString();
       nodeDetails.add(trainNodes[0]);
-      // print("====================================");
-      //   print(distanceTo);
-      // print("====================================");
-      // for (int j = 0; j < distanceTo.length; j++) {
-      // stepsToAirport = [];
-      //  var intStrDist = distanceTo[j].distance.replaceAll(
-      //      new RegExp(r'[^0-9,.]'), '');
-      //  var intStrDur = distanceTo[j].duration.replaceAll(
-      //      new RegExp(r'[^0-9,.]'), '');
-      //
-      //  stepsToAirport.add(intStrDist);
-      //  stepsToAirport.add(intStrDur);
-      //  stepsToAirport.add(distanceTo[j].cost.toString());
-      //  stepsToAirport.add(distanceTo[j].origin);
-      //  stepsToAirport.add(distanceTo[j].destination);
-      //  tronsonToAirport.add(stepsToAirport);
 
-      // }
-      //counter.add(distanceTo.length);
-      // print("************************************");
-      // print(tronsonToAirport);
-      // print("************************************");
-      //   totalDetailsVector.add(tronsonToAirport);
-      // }
-      // print(totalDetailsVector);
-      // print("-----------------------");
-      // for (int i = 0; i < romaniaAirportsMap.length; i++) {
-      //   for (int j = 0; j < counter[i]; j++) {
-      //     for (int k = 0; k < 5; k++) {
-      //       if(totalDetailsVector[i][j][k] !=null) {
-      //         print(totalDetailsVector[i][j][k]);
-      //       }
-      //     }
-      //   }
-      //   print("-----------------------");
-      // }
     }
     return nodeDetails ;
   }
-
 
     Future<List<Node>>getTronsonRouteDetailFromOriginAndDestinationWithTrainInternet(
       String origin,
@@ -328,28 +290,6 @@ class TronsonRouteApiProviderWithTransit {
               step.origin=step.departure_location;
               step.destination=step.arrival_location;
               stepList.add(step);
-             //  Node n = new Node();
-             //  n.weight="0.0".toString();
-             //  // print( "daaaaaaaaaaaaaaaaaaaa");
-             //  // print(step.departure_location.toString());
-             //  n.origin=step.departure_location.toString();
-             //  n.destination=step.arrival_location.toString();
-             //  n.duration=step.duration.toString();
-             //  n.distance=step.distance.toString();
-             //  if(step.cost != null)
-             //    n.cost=step.cost.toString();
-             //  else
-             //    n.cost="0.0";
-             // //n.cost=step.cost.toString();
-             //  n.departure_time=step.departure_time.toString();
-             //  n.arrival_time=step.arrival_time.toString();
-             //  n.departure_location=step.departure_location.toString();
-             //  n.arrival_location=step.arrival_location.toString();
-             //  n.train_type=step.train_type.toString();
-             //  n.departure_train=step.departure_train.toString();
-             //  n.agencies_name=step.agencies_name.toString();
-             //  n.stops_number=step.stops_number.toString();
-
               if(step.cost.toString() == "null") {
                 step.cost="0.0";
               }
@@ -368,9 +308,7 @@ class TronsonRouteApiProviderWithTransit {
           n.weight=NodeCalc().calcWeight(n).toString();
           trainNodes.add(n);
         });
-        //print(trainNodes);
         stepList.add(transit);
-        //print(stepList);
       } else {
         throw Exception('Failed to fetch suggestion');
       }

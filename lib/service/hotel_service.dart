@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:math';
 import 'package:http/http.dart';
 import 'package:sistem_de_recomandare/travel_service.dart';
+
+import '../nodeClass.dart';
 
 class Hotel {
   String id;
@@ -47,24 +51,28 @@ class HotelApiProvider {
   static final String androidKey = 'AIzaSyBrLgdXNKKw0FpUspuliQWmjDsR6bpvtRo';
   final apiKey =  androidKey;
 
-  Future<List<String>> getDestinationHotelDetail(
+  Future<List<Node>> getDestinationHotelDetail(
       String destination) async {
-
-    List<String> hotelList = [];
+    String targetHotel;
+    List<double> hotelCosts = [];
+    List<Node> targetNode=[];
     final hotels = await getHotelDetailsFromDestinationInternet(
           destination);
-      for (int j = 0; j < hotels.length; j++){
-        print(j);
-        print(hotels[j]);
-        print("====================================");
-      }
-
-    return hotelList;
+      // for (int j = 0; j < hotels.length; j++){
+      //   hotelCosts.add(double.parse(hotels[j].cost));
+      // }
+      //targetHotel=(hotelCosts).reduce(min).toString();
+    for (int j = 0; j < hotels?.length; j++){
+      //if((double.parse(hotels[j]?.cost)==double.parse(targetHotel)) && hotels[j] != null){
+        targetNode.add(hotels[j]);
+        hotels[j].length=hotels.length.toString();
+     // }
+    }
+       return targetNode;
   }
 
 
-  Future<
-      List<Hotel>> getHotelDetailsFromDestinationInternet(
+  Future<List<Node>> getHotelDetailsFromDestinationInternet(
       String destination) async {
     var airUrl = "https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=$destination&adults=1&checkInDate=2022-11-20&checkOutDate=2022-11-23&roomQuantity=1";
 
@@ -76,30 +84,26 @@ class HotelApiProvider {
         "client_secret": "rIJW2hknmn7g4o5w",
       },
     );
-    //  print(resultsFlights);
     List<Hotel> hotelList = [];
+    List<Node> hotelNodes = [];
 
     if (resultsHotels.statusCode == 200) {
       try {
-        // print(resultsFlights.body);
         var security = jsonDecode(resultsHotels.body);
-        // print(security);
         if (security != null) {
           var tokenType = security['token_type'];
-          // print(tokenType);
-          // print(security['access_token']);
           var token = security['access_token'];
           var bearerToken = '$tokenType ' + '$token';
-          // print("token: " + bearerToken);
           var response = await client.get(Uri.parse(airUrl),
               headers: {
                 "Authorization": bearerToken,
               });
           final result = json.decode(response.body);
-          // print(result['status']);
           final components = result['data'] as List<dynamic>;
           components.forEach((d) {
             final hotel = Hotel();
+            Node n = new Node();
+
             if (d['hotel']['name'] != null) {
               hotel.name = d['hotel']['name'];
             }
@@ -136,8 +140,15 @@ class HotelApiProvider {
                 }
 
                 hotelList.add(hotel);
-                //print(hotelList);
             });
+            n.name=hotel.name.toString();
+            n.bedNumber=hotel.bedNumber.toString();
+            n.contact=hotel.contact.toString();
+            n.cost=hotel.cost.toString();
+            n.roomDescription=hotel.roomDescription.toString();
+            n.currency=hotel.currency.toString();
+            n.weight=NodeCalc().hotelWeight(n).toString();
+            hotelNodes.add(n);
           });
         } else {
           throw Exception('Failed to fetch suggestion');
@@ -146,7 +157,7 @@ class HotelApiProvider {
       } catch (e) {
         print(e.toString());
       }
-      return hotelList;
+      return hotelNodes;
     }
   }
 }

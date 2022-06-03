@@ -44,7 +44,7 @@ class Fly {
 }
 class TronsonRouteApiProviderForFly {
 
-  Future<List<Node>> getRouteDetailFromAirToDestinationWithAir(
+  Future<List<List<Node>>> getRouteDetailFromAirToDestinationWithAir(
       String destination) async {
     List romaniaAirportsMap = [
       {
@@ -71,18 +71,18 @@ class TronsonRouteApiProviderForFly {
         "country": "Romania",
         "iataCode": "OMR",
       },
-      {
-        "name": "Sibiu International Airport",
-        "city": "Sibiu",
-        "country": "Romania",
-        "iataCode": "SBZ",
-      },
-      {
-        "name": "Transilvania Targu Mureș Airport",
-        "city": "Targu Mures",
-        "country": "Romania",
-        "iataCode": "TGM",
-      },
+      // {
+      //   "name": "Sibiu International Airport",
+      //   "city": "Sibiu",
+      //   "country": "Romania",
+      //   "iataCode": "SBZ",
+      // },
+      // {
+      //   "name": "Transilvania Targu Mureș Airport",
+      //   "city": "Targu Mures",
+      //   "country": "Romania",
+      //   "iataCode": "TGM",
+      // },
       {
         "name": "Timișoara Traian Vuia International Airport",
         "city": "Timisoara",
@@ -92,51 +92,18 @@ class TronsonRouteApiProviderForFly {
     ];
 
     List<List<List<String>>> totalDetailsVector = [];
-    List<List<String>> tronsonToDest = [];
+    List<List<Node>> tronsonToDest = [];
     List<Node> nodeDetails = [];
-    List<int> counter = [];
-    //print("+++++++++++++++++++++++++++++++++");
     for (int i = 0; i < romaniaAirportsMap?.length; i++) {
       tronsonToDest = [];
-      int count = 0;
       final flyNodes = await getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(
           romaniaAirportsMap[i]["iataCode"], destination);
-      //   for (int j = 0; j < distanceTo.length; j++){
-      //  print("====================================");
-      //  print(flyNodes);
-      //  print("====================================");
-      // }
-      //print(flyNodes);
       for (int j = 0; j < flyNodes.length; j++) {
           nodeDetails.add(flyNodes[j]);
-            // print("step: "+ k.toString());
-            // print("====================================");
-            // print(distanceTo[j][k]);
-            // print("====================================");
-            // tronsonToDest.add(stepsToDest);
           }
-      //counter.add(distanceTo[j].length);
+      tronsonToDest.add(nodeDetails);
     }
-    //}
-    //totalDetailsVector.add(tronsonToDest);
-
-
-    // print(totalDetailsVector);
-    // print("-----------------------");
-    // for (int i = 0; i < romaniaAirportsMap.length; i++) {
-    //   for (int j = 0; j < counter[i]; j++) {
-    //     for (int p = 0; p < counter[i]; p++) {
-    //       for (int k = 0; k < 12; k++) {
-    //         if (totalDetailsVector[i][j][k] != null) {
-    //           print(totalDetailsVector[i][j][k]);
-    //         }
-    //       }
-    //     }
-    //   }
-    //   print("-----------------------");
-    // }
-   // print(nodeDetails);
-    return nodeDetails;
+    return tronsonToDest;
   }
 
 
@@ -153,7 +120,6 @@ class TronsonRouteApiProviderForFly {
         "client_secret": "rIJW2hknmn7g4o5w",
       },
     );
-    //print("resultsFlights");
     List<List<List<Fly>>> dataList = [];
     List<List<Fly>> itinerariesList = [];
     List<Fly> stepList = [];
@@ -163,24 +129,16 @@ class TronsonRouteApiProviderForFly {
     if (resultsFlights.statusCode == 200) {
 
       try {
-        // print(resultsFlights.body);
         var security = jsonDecode(resultsFlights.body);
-
-        // print(security);
         if (security != null) {
           var tokenType = security['token_type'];
-          // print(tokenType);
-          // print(security['access_token']);
           var token = security['access_token'];
           var bearerToken = '$tokenType ' + '$token';
-          // print("token: " + bearerToken);
           var response = await client.get(Uri.parse(airUrl),
               headers: {
                 "Authorization": bearerToken,
               });
           final result = json.decode(response.body);
-          //print(response.body);
-
           final components = result['data'] as List<dynamic>;
           components.forEach((d) {
             final itinerComp = d['itineraries'] as List<dynamic>;
@@ -202,7 +160,6 @@ class TronsonRouteApiProviderForFly {
               final segComp = it['segments'] as List<dynamic>;
               segComp.forEach((seg) {
                 var step = Fly();
-                // print(seg['departure']);
                 if (seg['departure'] != null) {
                   step.departureIataCode = seg['departure']['iataCode']?.toString();
                   step.departureTime = seg['departure']['at']?.toString();
@@ -237,39 +194,19 @@ class TronsonRouteApiProviderForFly {
               });
 
               stepList.add(fly);
-              //stepList.add(fly);
               itinerariesList.add(stepList);
-              // print(itinerariesList);
-              // print("---------------------------------------");
-              // print(stepList);
-              // print("---------------------------------------");
-
              n.efort=segComp?.length?.toString();
              n.weight=NodeCalc().calcWeight(n)?.toString();
              flyNodes.add(n);
-              // print("---------------------------------------");
-              // print(flyNodes);
-              // print("---------------------------------------");
             });
             dataList.add(itinerariesList);
           });
-         // print(flyNodes);
-
-
         } else {
           throw Exception('Failed to fetch suggestion');
-
         }
       } catch (e) {
         print(e.toString());
       }
-      // for(int i=0;i<stepList.length;i++) {
-      //   print("---------------------------------");
-      //   print(stepList[i]);
-      //   print("---------------------------------");
-      // }
-      // print(dataList);
-
       return flyNodes;
     }
   }

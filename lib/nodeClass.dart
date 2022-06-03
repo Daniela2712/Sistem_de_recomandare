@@ -1,8 +1,10 @@
 
 import 'package:http/http.dart' as http;
+import 'package:sistem_de_recomandare/service/drive_service.dart';
 import 'dart:async';
 import 'dart:convert';
 
+import 'model/database_manager.dart';
 import 'service/NodeDetailsService.dart';
 
 class Node {
@@ -31,6 +33,16 @@ class Node {
   String description;
   String rating;
   String picture;
+  String adress;
+  String contact;
+  String checkInDate;
+  String checkOutDate;
+  String bedType;
+  String bedNumber;
+  String roomDescription;
+  String currency;
+  String length;
+
 
 
 
@@ -59,25 +71,45 @@ class Node {
     this.description,
     this.rating,
     this.picture,
-    this.efort
+    this.efort,
+    this.adress,
+    this.contact,
+    this.checkInDate,
+    this.checkOutDate,
+    this.bedType,
+    this.bedNumber,
+    this.roomDescription,
+    this.currency,
+    this.length
+
 
 
   });
 
   @override
   String toString() {
-    return 'Node(id: $id, weight: $weight, heuristic: $heuristic, origin: $origin, destination: $destination, duration: $duration, distance:$distance, cost: $cost, departure_location: $departure_location, departure_time: $departure_time, arrival_location: $arrival_location, arrival_time: $arrival_time, train_type: $train_type, agencies_name: $agencies_name, stops_number: $stops_number, departure_train:$departure_train, departureTerminal:$departureTerminal,arrivalTerminal:$arrivalTerminal,country:$country,city:$city, efort:$efort)';
+    return 'Node(id: $id, weight: $weight, heuristic: $heuristic, length:$length, origin: $origin, destination: $destination, name: $name, duration: $duration, distance:$distance, cost: $cost, departure_location: $departure_location, departure_time: $departure_time, arrival_location: $arrival_location, arrival_time: $arrival_time, train_type: $train_type, agencies_name: $agencies_name, stops_number: $stops_number, departure_train:$departure_train, departureTerminal:$departureTerminal,arrivalTerminal:$arrivalTerminal,country:$country,city:$city, efort:$efort,adress:$adress,contact:$contact,checkInDate:$checkInDate,checkOutDate:$checkOutDate, bedType:$bedType,bedNumber:$bedNumber,roomDescription:$roomDescription, currency:$currency )';
   }
 }
 class NodeCalc{
   double calcWeight(Node node){
     double sum;
-    // print(node.distance);
-    // print(node.duration);
-    // print(node.cost);
     sum=double.parse(node.cost)*0.5+double.parse(node.duration?.replaceAll(
         new RegExp(r'[^0-9,.]'), ''))*0.35+double.parse(node.efort)*0.15;
     return sum;
   }
 
+  double hotelWeight(Node node) {
+    double sum;
+    if(node.currency=="USD"){
+      sum=double.parse(node.cost)/double.parse("4.6");
+    }
+    else if(node.currency=="EUR"){
+      sum=double.parse(node.cost)/double.parse("4.94");
+    }
+    else{
+      sum=double.parse(node.cost);
+    }
+    return sum;
+  }
 }

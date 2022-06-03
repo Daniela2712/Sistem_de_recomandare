@@ -5,6 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
 import 'package:sistem_de_recomandare/travel_service.dart';
 
+import '../nodeClass.dart';
 import 'hotel_service.dart';
 
 
@@ -39,31 +40,42 @@ class Activity {
 }
 class ActivitiesProviderApi {
 
-  Future<List<List<String>>> getActivitiesForMultipleHotelDestinations(String destination) async {
+  Future<List<List<Node>>> getActivitiesForMultipleHotelDestinations(String destination) async {
     List<String> hotelNames = [];
     List<List<String>> activitiesList = [];
+    List<Node> activityNodes=[];
 
     final hotels = await HotelApiProvider().getHotelDetailsFromDestinationInternet(
         destination);
-
+List<List<Node>> aList=[];
     for (int j = 0; j < hotels.length; j++) {
-      hotelNames.add(hotels[j].name);
-      print(hotels[j].name);
-      List<Location> location = await locationFromAddress(hotels[j].name);
-      var latitude = location[0].latitude.toString();
-      var longitude = location[0].longitude.toString();
+      hotelNames.add(hotels[j]?.name);
+     // print(hotels[j]?.name);
+      try {
+        List<Location> location = await locationFromAddress(hotels[j]?.name);
+        var latitude = location[0].latitude.toString();
+        var longitude = location[0].longitude.toString();
       final activities = await getActivitiesListFromDestinationInternet(
           latitude, longitude);
-      print("====================================");
-      print(activities);
-      print("====================================");
-    }
+       // print(hotels[j]?.name);
+        for (int i = 0; i < activities.length; i++) {
+        //print(hotels[j]?.name);
+          activities[i].length=activities.length.toString();
+          activityNodes.add(activities[i]);
+         // print(activities[i]);
+      }
+      aList.add(activityNodes);
 
-    return activitiesList ;
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+     //print(activityNodes);
+    return aList ;
   }
 
 
-  Future<List<Activity>> getActivitiesListFromDestinationInternet(String latitude, String longitude) async {
+  Future<List<Node>> getActivitiesListFromDestinationInternet(String latitude, String longitude) async {
     var airUrl = "https://test.api.amadeus.com/v1/shopping/activities?latitude=$latitude&longitude=$longitude&radius=20&key=NtWb3s6JM63zuZ4q2X5eLg7F7gnRmW5LZLbzfAsxsGmw9RLQE8QVTvyt3wee";
 
     var resultsFlights = await client.post(
@@ -76,6 +88,7 @@ class ActivitiesProviderApi {
     );
     //  print(resultsFlights);
     List<Activity> activitiesList = [];
+    List<Node> activityNodes = [];
     if (resultsFlights.statusCode == 200) {
       try {
         // print(resultsFlights.body);
@@ -98,6 +111,7 @@ class ActivitiesProviderApi {
           final components = result['data'] as List<dynamic>;
           components.forEach((d) {
             var activity=Activity();
+            Node n = new Node();
             activity.name=d['name'].toString();
             activity.description=d['shortDescription'].toString();
             activity.latitude=d['geoCode']['latitude'].toString();
@@ -107,6 +121,15 @@ class ActivitiesProviderApi {
             activity.cost=d['price']['amount'].toString();
             activity.currency=d['price']['currencyCode'];
             activitiesList.add(activity);
+
+
+            n.name=activity.name.toString();
+            n.cost=activity.cost.toString();
+            n.currency=activity.currency.toString();
+            n.rating=activity.rating.toString();
+            n.description=activity.description.toString();
+            n.weight=NodeCalc().hotelWeight(n).toString();
+            activityNodes.add(n);
           });
 
         } else {
@@ -116,13 +139,13 @@ class ActivitiesProviderApi {
       } catch (e) {
         print(e.toString());
       }
-      for(int i=0;i<activitiesList.length;i++) {
-        print("---------------------------------");
-        print(activitiesList[i]);
-        print("---------------------------------");
-      }
-      //print(dataList);
-      return activitiesList;
+      // for(int i=0;i<activitiesList.length;i++) {
+      //   print("---------------------------------");
+      //   print(activitiesList[i]);
+      //   print("---------------------------------");
+      // }
+      // //print(dataList);
+      return activityNodes;
     }
   }
 }

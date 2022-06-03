@@ -42,9 +42,10 @@ class TronsonRouteApiProviderWithCar {
   double tronsonCostWithCar(String distance) {
     var consum = 6; // 6 litre/100km
     var carburantCost = 7; // 7 lei per litre
-    String distanceConverted=distance.replaceAll("km", "").trim();
+    String distanceConverted=distance.replaceAll(
+        new RegExp(r'[^0-9]'), '');
+
     double cost = (consum / 100) * double.parse(distanceConverted) * carburantCost;
-   // print(cost);
     return cost;
   }
 
@@ -78,18 +79,18 @@ class TronsonRouteApiProviderWithCar {
         "country": "Romania",
         "iataCode": "OMR",
       },
-      {
-        "name": "Sibiu International Airport",
-        "city": "Sibiu",
-        "country": "Romania",
-        "iataCode": "SBZ",
-      },
-      {
-        "name": "Transilvania Targu Mureș Airport",
-        "city": "Targu Mures",
-        "country": "Romania",
-        "iataCode": "TGM",
-      },
+      // {
+      //   "name": "Sibiu International Airport",
+      //   "city": "Sibiu",
+      //   "country": "Romania",
+      //   "iataCode": "SBZ",
+      // },
+      // {
+      //   "name": "Transilvania Targu Mureș Airport",
+      //   "city": "Targu Mures",
+      //   "country": "Romania",
+      //   "iataCode": "TGM",
+      // },
       {
         "name": "Timișoara Traian Vuia International Airport",
         "city": "Timisoara",
@@ -103,35 +104,9 @@ class TronsonRouteApiProviderWithCar {
 
       final carNodes = await getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(
           origin, romaniaAirportsMap[i]["name"]);
+      carNodes[0].length=carNodes.length.toString();
       nodeDetails.add(carNodes[0]);
-
-      // var intStrDist = distanceTo.distance.replaceAll(
-      //     new RegExp(r'[^0-9,.]'), '');
-      //
-      // tronsonToAirport.add(intStrDist);
-      // var intStrDur = distanceTo.duration.replaceAll(
-      //     new RegExp(r'[^0-9,.]'), '');
-      //
-      // tronsonToAirport.add(intStrDur);
-      // tronsonToAirport.add(distanceTo.cost.toString());
-      // tronsonToAirport.add(distanceTo.origin);
-      // tronsonToAirport.add(distanceTo.destination);
-      //
-      // //totalDetailsVector.add(tronsonToAirport);
     }
-
-
-    // print("-----------------------");
-    // for (int i = 0; i < totalDetailsVector.length; i++) {
-    //   for (int j = 0; j < 5; j++) {
-    //     print(totalDetailsVector[i][j]);
-    //print(carNodes);
-    //   }
-    //   print("-----------------------");
-    //}
-    // print("-----------------------");
-    // print(nodeDetails);
-    // print("-----------------------");
     return nodeDetails;
   }
 
@@ -181,11 +156,10 @@ class TronsonRouteApiProviderWithCar {
         else
           n.cost="0";
         n.efort=(double.parse(tronson.distance.replaceAll(
-            new RegExp(r'[^0-9,.]'), ''))/100).round().toString();
+            new RegExp(r'[^0-9]'), ''))/100).round().toString();
         n.weight=NodeCalc().calcWeight(n).toString();
 
         carNodes.add(n);
-        //print(carNodes);
       } else {
         throw Exception('Failed to fetch suggestion');
       }
@@ -193,76 +167,4 @@ class TronsonRouteApiProviderWithCar {
     return carNodes;
   }
 
-
-  Future<List<String>> getNearestAirportFromOrigin(String origin) async {
-    List<Location> location = await locationFromAddress(origin);
-
-    //getDistanceToRomanianAirport(origin);
-
-    var latitude = location[0].latitude;
-    var longitude = location[0].longitude;
-    // print(latitude);
-    // print(longitude);
-    var nearestAirportUrl = "https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=$latitude&longitude=$longitude&radius=500&page%5Blimit%5D=3&page%5Boffset%5D=0&sort=distance";
-    var airportName;
-    var iataCode;
-    var cityCode;
-    var distanceAirFromOr;
-    List<String> nearestAirDetails;
-
-    var secResponse = await client.post(
-      Uri.parse('https://test.api.amadeus.com/v1/security/oauth2/token'),
-      body: {
-        "grant_type": "client_credentials",
-        "client_id": "zHmPH2go7aCsH6qAigzfbvSjNj2EvaA1",
-        "client_secret": "rIJW2hknmn7g4o5w",
-      },
-    );
-    //https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=$latitude&longitude=$longitude&radius=500&page%5Blimit%5D=3&page%5Boffset%5D=0&sort=distance
-   // print(secResponse);
-    if (secResponse.statusCode == 200) {
-      try {
-        //print(secResponse.body);
-        var security = jsonDecode(secResponse.body);
-        //print(security);
-        if (security != null) {
-          var tokenType = security['token_type'];
-         // print(tokenType);
-         // print(security['access_token']);
-          var token = security['access_token'];
-          var bearerToken = '$tokenType ' + '$token';
-         // print("token: " + bearerToken);
-          var response = await client.get(Uri.parse(
-              nearestAirportUrl),
-              headers: {
-                "Authorization": bearerToken,
-
-              });
-          final result = json.decode(response.body);
-          //print(result);
-          if (result['status'] == 'OK') {
-            final components = result['data'] as List<dynamic>;
-           // print(components);
-            airportName = result['data']['name'];
-            iataCode = result['data']['iataCode'];
-           // print(components);
-            components.forEach((c) {
-              cityCode = c['adress']['cityCode'];
-              distanceAirFromOr = c['distance']['value'];
-            });
-            nearestAirDetails.insert(0, airportName);
-            nearestAirDetails.insert(1, iataCode);
-            nearestAirDetails.insert(2, cityCode);
-            nearestAirDetails.insert(3, distanceAirFromOr);
-          }
-        } else {
-          throw Exception('Failed to fetch suggestion');
-        }
-      } catch (e) {
-        print(e.toString());
-      }
-     // print(nearestAirDetails);
-      return nearestAirDetails;
-    }
-  }
 }

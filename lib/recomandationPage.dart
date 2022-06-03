@@ -55,7 +55,8 @@ class _UserFormState extends State<UserForm> {
      // print(userTravelDetails.toString());
       //HotelApiProvider().getDestinationHotelDetail("MAD");
       //ActivitiesProviderApi().getActivitiesForMultipleHotelDestinations("MAD");
-      httpService().postServerInfo();
+        httpService().postServerInfo();
+     // HotelApiProvider().getDestinationHotelDetail("MAD");
       //TronsonRouteApiProviderForFly().getRouteDetailFromAirToDestinationWithAir();
 
       //TronsonRouteApiProviderForFly().getRouteDetailFromAirToDestinationWithAir("MAD");
