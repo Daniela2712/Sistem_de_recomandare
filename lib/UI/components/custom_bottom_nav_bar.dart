@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../recomandationPage.dart';
 import '../bottomNavBar/constants/color.dart';
 import '../bottomNavBar/constants/text_style.dart';
 import '../bottomNavBar/data/model.dart';
@@ -49,6 +50,7 @@ import '../size_config.dart';
               onTap: () => setState((){
                               selectBtn = i;
                             }),
+
               child: iconBtn(i),
             ),
         ],
@@ -98,6 +100,7 @@ import '../size_config.dart';
           //     )
           //   ),
           // ),
+
         ],
       ),
     );
@@ -107,5 +110,12 @@ import '../size_config.dart';
   State<StatefulWidget> createState() {
     // TODO: implement createState
     throw UnimplementedError();
+  }
+  navigateToNextActivity2(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => UserForm("Trip plan", "Brasov","Madrid","2022-08-29")
+        )
+    );
   }
 }

@@ -16,8 +16,12 @@ import 'model/service_locator.dart';
 
 class UserForm extends StatefulWidget {
  // UserForm({Key key}) : super(key: key);
-   final String idHolder;
-   UserForm(this.idHolder);
+   final String origin;
+   final String destination;
+   final String departure_date;
+   final String trip_name;
+
+   UserForm(this.origin, this.destination, this.departure_date, this.trip_name);
 
   @override
   _UserFormState createState() => _UserFormState();
@@ -87,6 +91,9 @@ class _UserFormState extends State<UserForm> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: AppBar(
+        title: Text('Trip info')
+      ),
       body:new Container(
         // width: MediaQuery.of(context).size.width,
         // height: MediaQuery.of(context).size.height,

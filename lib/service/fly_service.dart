@@ -196,7 +196,7 @@ class TronsonRouteApiProviderForFly {
               stepList.add(fly);
               itinerariesList.add(stepList);
              n.efort=segComp?.length?.toString();
-             n.weight=NodeCalc().calcWeight(n)?.toString();
+             n.weight=NodeCalc().calcFlyWeight(n)?.toString();
              flyNodes.add(n);
             });
             dataList.add(itinerariesList);

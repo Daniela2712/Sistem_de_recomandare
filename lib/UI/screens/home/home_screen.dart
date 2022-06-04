@@ -4,6 +4,8 @@ import 'package:sistem_de_recomandare/UI/components/custom_bottom_nav_bar.dart';
 import 'package:sistem_de_recomandare/UI/screens/home/components/body.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../../dashboard.dart';
+import '../../../recomandationPage.dart';
 import '../../constants.dart';
 import '../user_profile/pages/profile_page.dart';
 
@@ -45,8 +47,8 @@ class HomeScreen extends StatelessWidget {
               ),
               title: const Text('Page 1'),
               onTap: () {
-                Navigator.pop(context);
-              },
+                navigateToNextActivity2(context);
+                },
             ),
             ListTile(
               leading: Icon(
@@ -114,6 +116,13 @@ class HomeScreen extends StatelessWidget {
         MaterialPageRoute(
             builder: (context) => ProfilePage()
 
+        )
+    );
+  }
+  navigateToNextActivity2(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => FirstTripInfo()
         )
     );
   }

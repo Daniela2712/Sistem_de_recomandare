@@ -98,6 +98,26 @@ class NodeCalc{
         new RegExp(r'[^0-9,.]'), ''))*0.35+double.parse(node.efort)*0.15;
     return sum;
   }
+  double calcFlyWeight(Node node){
+    double sum;
+    String duration = node.duration;
+    String delimiter = 'H';
+    int middleIndex = duration.indexOf(delimiter);
+    String delimiter2 = 'M';
+    int lastIndex = duration.indexOf(delimiter2);
+    String trimmedHour = duration.substring(2,middleIndex);
+    String trimmedMinutes = duration.substring(middleIndex+1,lastIndex);
+    trimmedHour.replaceAll(
+        new RegExp(r'[^0-9]'), '');
+    trimmedMinutes.replaceAll(
+        new RegExp(r'[^0-9]'), '');
+
+
+    var durationTrimmed = Duration(hours: int.parse(trimmedHour), minutes: int.parse(trimmedMinutes), seconds: 0);
+
+    sum=double.parse(node.cost)*0.5+double.parse(durationTrimmed.inSeconds.toString())*0.35+double.parse(node.efort)*0.15;
+    return sum;
+  }
 
   double hotelWeight(Node node) {
     double sum;
@@ -106,6 +126,9 @@ class NodeCalc{
     }
     else if(node.currency=="EUR"){
       sum=double.parse(node.cost)/double.parse("4.94");
+    }
+    else if(node.currency=="GBP"){
+      sum=double.parse(node.cost)/double.parse("5.76");
     }
     else{
       sum=double.parse(node.cost);

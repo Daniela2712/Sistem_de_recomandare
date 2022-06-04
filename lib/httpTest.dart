@@ -17,7 +17,7 @@ class httpService {
 
   Future<void> fetchServerInfo() async {
     final response = await http.get(
-        Uri.parse("http://192.168.193.66:8080/api/products/SONY"));
+        Uri.parse("http://192.168.134.66:8080/api/aStar"));
     if (response.statusCode == 200) {
       var responseJson = json.decode(response.body);
       print(responseJson);
@@ -28,7 +28,7 @@ class httpService {
 
   Future<List<Node>> storeNodes() async {
     List<Node> carNodes;
-    carNodes = await TronsonRouteApiProviderWithCar().getTronsonRouteDetailFromOriginAndDestinationWithCarInternet("Brasov", "Madrid");
+    carNodes = await TronsonRouteApiProviderWithCar().getTronsonRouteDetailFromOriginAndDestinationWithCarInternet("Brasov", "Paris");
     return carNodes;
   }
 
@@ -85,9 +85,9 @@ class httpService {
     //print(" Node $i : $carNode[i]");
 
     List<Node> carNodes;
-    carNodes = await TronsonRouteApiProviderWithCar().getRouteDetailToRomanianAirportWithCar("London");
+    carNodes = await TronsonRouteApiProviderWithCar().getRouteDetailToRomanianAirportWithCar("Brasov");
     List<Node> trainNodes;
-    trainNodes = await TronsonRouteApiProviderWithTransit().getRouteDetailToRomanianAirportWithTrain("London");
+    trainNodes = await TronsonRouteApiProviderWithTransit().getRouteDetailToRomanianAirportWithTrain("Brasov");
     List<Node> hotelNode;
     hotelNode = await HotelApiProvider().getHotelDetailsFromDestinationInternet("LON");
     List<Node> flyNodes1=[];
@@ -177,6 +177,13 @@ class httpService {
         print(e.toString());
       }
 
+    print(activitiesNode3);
+    print(activitiesNode4);
+    print(activitiesNode5);
+    print(activitiesNode6);
+    print(activitiesNode7);
+    print(activitiesNode8);
+
 
     var car = [carNode,carNodes].expand((x) => x).toList();
     var allNodes = [car,trainNodes,flyNodes1,flyNodes2,flyNodes3,flyNodes4,flyNodes5,hotelNode,activitiesNode1,activitiesNode2].expand((x) => x).toList();
@@ -184,11 +191,14 @@ class httpService {
       print(" Node $i ");
       print(allNodes[i]);
     }
-    // print(allNodes[2]);
-    // print(allNodes[18]);
+    // print(allNodes[5]);
+    // print(allNodes[35]);
     // print(allNodes[36]);
-    // print(allNodes[51]);
-    // print(allNodes[78]);
+    // print(allNodes[76]);
+    // print(allNodes[83]);
+    final resp = await http.delete(
+        Uri.parse('http://192.168.134.66:8080/api/deleteProducts'));
+
     for(int i=0;i<car.length; i++) {
       final nodeData = {
         'name' : i.toString(),
@@ -440,7 +450,7 @@ class httpService {
       );
     }
 
-
+    fetchServerInfo();
 
   }
 
