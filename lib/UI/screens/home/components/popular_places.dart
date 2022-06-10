@@ -16,7 +16,7 @@ class PopularPlaces extends StatelessWidget {
     return Column(
       children: [
         SectionTitle(
-          title: "Right Now At Spark",
+          title: "Popular Places",
           press: () {},
         ),
         VerticalSpacing(of: 20),
@@ -37,21 +37,7 @@ class PopularPlaces extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                width: getProportionateScreenWidth(kDefaultPadding),
-              ),
-              ...List.generate(
-                travelSpots.length,
-                    (index) => Padding(
-                  padding: EdgeInsets.only(
-                      left: getProportionateScreenWidth(kDefaultPadding)),
-                  child: PlaceCard(
-                    travelSport: travelSpots[index],
 
-                    press: () {},
-                  ),
-                ),
-              ),
               SizedBox(
                 width: getProportionateScreenWidth(kDefaultPadding),
               ),

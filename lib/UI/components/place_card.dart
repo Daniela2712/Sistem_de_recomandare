@@ -107,17 +107,17 @@ class Travelers extends StatelessWidget {
         alignment: Alignment.center,
         children: [
 
-          Positioned(
-            child: Container(
-              height: getProportionateScreenWidth(28),
-              width: getProportionateScreenWidth(28),
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: Text("Details"),
-            ),
-          )
+          // Positioned(
+          //   child: Container(
+          //     height: getProportionateScreenWidth(28),
+          //     width: getProportionateScreenWidth(28),
+          //     decoration: BoxDecoration(
+          //       color: kPrimaryColor,
+          //       shape: BoxShape.circle,
+          //     ),
+          //     child: Text("Details"),
+          //   ),
+          // )
         ],
       ),
     );

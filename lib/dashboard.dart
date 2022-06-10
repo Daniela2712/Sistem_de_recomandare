@@ -54,125 +54,140 @@ class _FirstTripInfoState extends State<FirstTripInfo> {
         title: Text("Trip info"),
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-              controller: _tripNameController,
-              decoration: InputDecoration(
-                  hintText: 'Enter your trip name',
-                  labelText: 'Name',
-                  contentPadding: EdgeInsets.all(10.0)
-              ),
-            ),
-
-            TextField(
-              controller: _originController,
-              readOnly: true,
-              onTap: () async {
-                // generate a new token here
-                final sessionToken = Uuid().v4();
-                final Suggestion result = await showSearch(
-                  context: context,
-                  delegate: AddressSearch(sessionToken),
-                );
-
-                if (result != null) {
-                  final placeDetails = await PlaceApiProvider(sessionToken)
-                      .getPlaceDetailFromId(result.placeId);
-                  setState(() {
-                    _originController.text = result.description;
-                    city = placeDetails.city;
-                    origin=_originController.text;
-                  });
-                }
-              },
-              decoration: InputDecoration(
-                icon: Container(
-                  width: 10,
-                  height: 10,
-                  child: Icon(
-                    Icons.search_sharp,
-                    color: Colors.black,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextFormField(
+                    controller: _tripNameController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        hintText: 'Enter your trip name',
+                        labelText: 'Name',
+                        contentPadding: EdgeInsets.all(10.0)
+                    ),
                   ),
+
+                    TextField(
+                      controller: _originController,
+                      readOnly: true,
+                      onTap: () async {
+                        // generate a new token here
+                        final sessionToken = Uuid().v4();
+                        final Suggestion result = await showSearch(
+                          context: context,
+                          delegate: AddressSearch(sessionToken),
+                        );
+
+                        if (result != null) {
+                          final placeDetails = await PlaceApiProvider(sessionToken)
+                              .getPlaceDetailFromId(result.placeId);
+                          setState(() {
+                            _originController.text = result.description;
+                            city = placeDetails.city;
+                            origin=_originController.text;
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                          hintText: 'Enter your origin address',
+                          labelText: 'Origin',
+                          contentPadding: EdgeInsets.all(10.0)
+                      ),
+                    ),
+
+                    TextField(
+                      controller: _destinatoionController,
+                      readOnly: true,
+                      onTap: () async {
+                        // generate a new token here
+                        final sessionToken = Uuid().v4();
+                        final Suggestion result = await showSearch(
+                          context: context,
+                          delegate: AddressSearch(sessionToken),
+                        );
+                        // This will change the text displayed in the TextField
+                        if (result != null) {
+                          final placeDetails = await PlaceApiProvider(sessionToken)
+                              .getPlaceDetailFromId(result.placeId);
+                          setState(() {
+                            _destinatoionController.text = result.description;
+                            city_dest = placeDetails.city;
+                            destination=_destinatoionController.text;
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                          hintText: 'Enter your Destination address',
+                          labelText: 'Destination',
+                          contentPadding: EdgeInsets.all(10.0)
+                      ),
+                    ),
+                  Column(children: <Widget>[
+                    TextField(
+                      controller: _dateController, //editing controller of this TextField
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today), //icon of text field
+                        labelText: "Enter Date" //label text of field
+                      ),
+                     readOnly: true,  //set it true, so that user will not able to edit text
+                     onTap: () {
+                       _selectDate(context);
+                     }
+                   //     Text("${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
+                    )
+                   ]
+                    ),
+
+                    Row(
+                     children:[
+                       Expanded(
+                       child: Padding(
+                           padding: EdgeInsets.only(
+                               top: 5
+                           ),
+                          child: ElevatedButton(
+                             onPressed: ()  {
+                               navigateToNextActivity(context);
+                               SizedBox(
+                                 height: 20.0,
+                               );
+
+                           },
+                           child: Text('Next'),
+                          ),
+                         ),
+                       ),
+                      ]
+                     )
+                  ],
                 ),
-                hintText: "Enter your origin address",
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(left: 8.0, top: 16.0),
               ),
             ),
-
-            TextField(
-              controller: _destinatoionController,
-              readOnly: true,
-              onTap: () async {
-                // generate a new token here
-                final sessionToken = Uuid().v4();
-                final Suggestion result = await showSearch(
-                  context: context,
-                  delegate: AddressSearch(sessionToken),
-                );
-                // This will change the text displayed in the TextField
-                if (result != null) {
-                  final placeDetails = await PlaceApiProvider(sessionToken)
-                      .getPlaceDetailFromId(result.placeId);
-                  setState(() {
-                    _destinatoionController.text = result.description;
-                    city_dest = placeDetails.city;
-                    destination=_destinatoionController.text;
-                  });
-                }
-              },
-              decoration: InputDecoration(
-                icon: Container(
-                  width: 10,
-                  height: 10,
-                  child: Icon(
-                    Icons.search_sharp,
-                    color: Colors.black,
-                  ),
-                ),
-                hintText: "Enter your destination address",
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(left: 8.0, top: 16.0),
-              ),
-            ),
-          Column(children: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                _selectDate(context);
-                },
-                child: Text("Choose Date"),
-              ),
-              Text("${selectedDate.year}-${selectedDate.month}-${selectedDate.day}")
-          ]),
-
-            TextButton(
-              onPressed: ()  {
-                navigateToNextActivity(context);
-                SizedBox(height: 20.0);
-
-              },
-              child: Text('Next'),
-            ),
-          ],
         ),
-      ),
     );
 
   }
   _selectDate(BuildContext context) async {
+
+
     final DateTime selected = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2010),
       lastDate: DateTime(2025),
     );
+    NumberFormat formatter = new NumberFormat("00");
     if (selected != null && selected != selectedDate)
       setState(() {
-        _dateController.text = selected.toString();
+        _dateController.text = "${selectedDate.year}-${formatter.format(selectedDate.month)}-${formatter.format(selectedDate.day)}";
         departure_date=_dateController.text;
+        selectedDate=selected;
       });
   }
   navigateToNextActivity(BuildContext context) {

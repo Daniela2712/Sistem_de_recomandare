@@ -13,17 +13,20 @@ class TravelSpot {
 
 List<TravelSpot> travelSpots = [
   TravelSpot(
-    name: "Red Mountains",
-    image: "assets/images/Magical_World.png",
+    name: "Roman Colosseum, Rome",
+    image: "assets/images/rome.jpg",
   ),
   TravelSpot(
-    name: "Megical World",
-    image: "assets/images/Magical_World.png",
+    name: "Sagrada Familia, Barcelona",
+    image: "assets/images/sagrada_familia.jpg",
   ),
   TravelSpot(
-   // users: users..shuffle(),
-    name: "Red Mountains",
-    image: "assets/images/Magical_World.png",
+    name: "Liberty Island, New York",
+    image: "assets/images/liberty.jpg",
+  ),
+  TravelSpot(
+    name: "Paris",
+    image: "assets/images/paris.jpg",
   ),
 ];
 

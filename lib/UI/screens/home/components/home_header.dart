@@ -41,8 +41,9 @@ class HomeHeader extends StatelessWidget {
             ],
           ),
           Positioned(
-            bottom: getProportionateScreenWidth(-25),
             child: SearchField(),
+            bottom: getProportionateScreenWidth(-50),
+
           )
         ],
       ),

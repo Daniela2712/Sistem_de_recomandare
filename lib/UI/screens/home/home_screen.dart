@@ -5,6 +5,7 @@ import 'package:sistem_de_recomandare/UI/screens/home/components/body.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../dashboard.dart';
+import '../../../plan.dart';
 import '../../../recomandationPage.dart';
 import '../../constants.dart';
 import '../user_profile/pages/profile_page.dart';
@@ -26,15 +27,15 @@ class HomeScreen extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             const UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: const Color(0xffac98b5)),
+              decoration: BoxDecoration(color: const Color(0xb7059bc9)),
               accountName: Text(
-                "Pinkesh Darji",
+                "Jugănaru Daniela",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               accountEmail: Text(
-                "pinkesh.earth@gmail.com",
+                "j.daniela@gmail.com",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,20 +46,20 @@ class HomeScreen extends StatelessWidget {
               leading: Icon(
                 Icons.home,
               ),
-              title: const Text('Page 1'),
+              title: const Text('Trip plan Generator'),
               onTap: () {
                 navigateToNextActivity2(context);
                 },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.train,
-              ),
-              title: const Text('Page 2'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.train,
+            //   ),
+            //   title: const Text('Page 2'),
+            //   onTap: () {
+            //    // navigateToNextActivity3(context);
+            //   },
+            // ),
             AboutListTile( // <-- SEE HERE
               icon: Icon(
                 Icons.info,
@@ -67,9 +68,9 @@ class HomeScreen extends StatelessWidget {
               applicationIcon: Icon(
                 Icons.local_play,
               ),
-              applicationName: 'My Cool App',
+              applicationName: 'Trip plan',
               applicationVersion: '1.0.25',
-              applicationLegalese: '© 2019 Company',
+              applicationLegalese: '© 2022 Company',
               aboutBoxChildren: [
                 ///Content goes here...
               ],
@@ -126,4 +127,11 @@ class HomeScreen extends StatelessWidget {
         )
     );
   }
-}
+//   navigateToNextActivity3(BuildContext context) {
+//     Navigator.of(context).push(
+//         MaterialPageRoute(
+//             builder: (context) => Plan()
+//         )
+//     );
+//   }
+ }

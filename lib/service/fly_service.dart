@@ -45,7 +45,8 @@ class Fly {
 class TronsonRouteApiProviderForFly {
 
   Future<List<List<Node>>> getRouteDetailFromAirToDestinationWithAir(
-      String destination) async {
+      String destination,String departure_date,
+      String adults,) async {
     List romaniaAirportsMap = [
       {
         "name": "Henri Coanda International Airport",
@@ -97,7 +98,7 @@ class TronsonRouteApiProviderForFly {
     for (int i = 0; i < romaniaAirportsMap?.length; i++) {
       tronsonToDest = [];
       final flyNodes = await getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(
-          romaniaAirportsMap[i]["iataCode"], destination);
+          romaniaAirportsMap[i]["iataCode"], destination, departure_date, adults);
       for (int j = 0; j < flyNodes.length; j++) {
           nodeDetails.add(flyNodes[j]);
           }
@@ -109,8 +110,13 @@ class TronsonRouteApiProviderForFly {
 
   Future<List<Node>> getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(
       String origin,
-      String destination,) async {
-    var airUrl = "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=$origin&destinationLocationCode=$destination&departureDate=2022-11-10&adults=3&nonStop=false&max=5";
+      String destination,
+      String departure_date,
+      String adults,
+
+      ) async {
+
+    var airUrl = "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=$origin&destinationLocationCode=$destination&departureDate=$departure_date&adults=$adults&nonStop=false&max=5";
 
     var resultsFlights = await client.post(
       Uri.parse('https://test.api.amadeus.com/v1/security/oauth2/token'),

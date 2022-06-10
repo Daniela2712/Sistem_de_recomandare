@@ -40,13 +40,18 @@ class Activity {
 }
 class ActivitiesProviderApi {
 
-  Future<List<List<Node>>> getActivitiesForMultipleHotelDestinations(String destination) async {
+  Future<List<List<Node>>> getActivitiesForMultipleHotelDestinations(
+      String destination,
+      String adults,
+      String checkInDate,
+      String checkOutDate,
+      String roomQuantity,) async {
     List<String> hotelNames = [];
     List<List<String>> activitiesList = [];
     List<Node> activityNodes=[];
 
     final hotels = await HotelApiProvider().getHotelDetailsFromDestinationInternet(
-        destination);
+        destination,adults, checkInDate, checkOutDate, roomQuantity);
 List<List<Node>> aList=[];
     for (int j = 0; j < hotels.length; j++) {
       hotelNames.add(hotels[j]?.name);

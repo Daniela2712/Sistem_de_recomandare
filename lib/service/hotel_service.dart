@@ -52,12 +52,16 @@ class HotelApiProvider {
   final apiKey =  androidKey;
 
   Future<List<Node>> getDestinationHotelDetail(
-      String destination) async {
+      String destination,
+      String adults,
+      String checkInDate,
+      String checkOutDate,
+      String roomQuantity) async {
     String targetHotel;
     List<double> hotelCosts = [];
     List<Node> targetNode=[];
     final hotels = await getHotelDetailsFromDestinationInternet(
-          destination);
+        destination,adults, checkInDate, checkOutDate, roomQuantity);
       // for (int j = 0; j < hotels.length; j++){
       //   hotelCosts.add(double.parse(hotels[j].cost));
       // }
@@ -73,8 +77,15 @@ class HotelApiProvider {
 
 
   Future<List<Node>> getHotelDetailsFromDestinationInternet(
-      String destination) async {
-    var airUrl = "https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=$destination&adults=1&checkInDate=2022-11-20&checkOutDate=2022-11-23&roomQuantity=1";
+      String destination,
+      String adults,
+      String checkInDate,
+      String checkOutDate,
+      String roomQuantity,
+
+
+      ) async {
+    var airUrl = "https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=$destination&adults=$adults&checkInDate=$checkInDate&checkOutDate=$checkOutDate&roomQuantity=$roomQuantity";
 
     var resultsHotels = await client.post(
       Uri.parse('https://test.api.amadeus.com/v1/security/oauth2/token'),
