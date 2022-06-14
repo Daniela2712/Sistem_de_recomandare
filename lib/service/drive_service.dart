@@ -13,6 +13,7 @@ class Tronson {
   String origin;
   String destination;
   String duration;
+  String durationA;
   String distance;
   String cost;
 
@@ -21,6 +22,7 @@ class Tronson {
     this.origin,
     this.destination,
     this.duration,
+    this.durationA,
     this.distance,
     this.cost
   });
@@ -45,7 +47,7 @@ class TronsonRouteApiProviderWithCar {
     String distanceConverted=distance.replaceAll(
         new RegExp(r'[^0-9]'), '');
 
-    double cost = (consum / 100) * double.parse(distanceConverted) * carburantCost;
+    double cost = (((consum / 100) * double.parse(distanceConverted) * carburantCost)/4.94);
     return cost;
   }
 
@@ -129,10 +131,11 @@ class TronsonRouteApiProviderWithCar {
           leg.forEach((d) {
             if (d['duration'] != null) {
               tronson.duration = d['duration']['value'].toString();
+              tronson.durationA = d['duration']['text'].toString();
             }
             if (d['distance'] != null) {
               tronson.distance = d['distance']['text'].toString();
-              tronson.cost = tronsonCostWithCar(tronson.distance).toString();
+              tronson.cost = tronsonCostWithCar(tronson.distance).toStringAsFixed(2);
               tronson.origin = origin;
               tronson.destination = destination;
             }
@@ -143,8 +146,10 @@ class TronsonRouteApiProviderWithCar {
           n.origin=tronson.origin.toString();
         if(tronson.destination != null)
           n.destination=tronson.destination.toString();
-        if(tronson.duration != null)
-          n.duration=tronson.duration.toString();
+        if(tronson.duration != null) {
+          n.duration = tronson.duration.toString();
+          n.durationA=tronson.durationA.toString();
+        }
         else
           n.duration="0";
         if(tronson.distance != null)

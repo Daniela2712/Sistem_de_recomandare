@@ -46,8 +46,8 @@ Future<List<Airport>> getNearestAirportFromOrigin(String origin) async {
     Uri.parse('https://test.api.amadeus.com/v1/security/oauth2/token'),
     body: {
       "grant_type": "client_credentials",
-      "client_id": "zHmPH2go7aCsH6qAigzfbvSjNj2EvaA1",
-      "client_secret": "rIJW2hknmn7g4o5w",
+      "client_id": "VU9Amuj3zDuOTH8yHgjOyWo1becRjDX1",
+      "client_secret": "rEsHUp1euN08sCYQ",
     },
   );
   //https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=$latitude&longitude=$longitude&radius=500&page%5Blimit%5D=3&page%5Boffset%5D=0&sort=distance

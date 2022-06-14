@@ -41,7 +41,19 @@ class Hotel {
     return 'Hotel(id: $id, name: $name, description: $description, adress: $adress, cost: $cost,contact: $contact, checkInDate: $checkInDate, checkOutDate: $checkOutDate, bedType: $bedType, bedNumber: $bedNumber, roomDescription: $roomDescription, currency: $currency)';
   }
 }
-
+double calcCost(String cost, String currency){
+  double costTotal;
+  if(currency=="EUR") {
+    costTotal =double.parse(cost);
+  }else if(currency=="USD"){
+    costTotal =double.parse(cost)*0.95;
+  }else if(currency=="GBP"){
+    costTotal =double.parse(cost)*1.17;
+  }else{
+    costTotal =double.parse(cost);
+  }
+  return costTotal;
+}
 
 class HotelApiProvider {
   final client = Client();
@@ -101,6 +113,7 @@ class HotelApiProvider {
     if (resultsHotels.statusCode == 200) {
       try {
         var security = jsonDecode(resultsHotels.body);
+        print(resultsHotels.body);
         if (security != null) {
           var tokenType = security['token_type'];
           var token = security['access_token'];
@@ -155,9 +168,10 @@ class HotelApiProvider {
             n.name=hotel.name.toString();
             n.bedNumber=hotel.bedNumber.toString();
             n.contact=hotel.contact.toString();
-            n.cost=hotel.cost.toString();
             n.roomDescription=hotel.roomDescription.toString();
             n.currency=hotel.currency.toString();
+            n.cost=(calcCost(hotel.cost.toString(),hotel.currency.toString())).toStringAsFixed(2);
+           // n.cost=hotel.cost.toString();
             n.weight=NodeCalc().hotelWeight(n).toString();
             hotelNodes.add(n);
           });

@@ -13,6 +13,7 @@ import 'package:sistem_de_recomandare/service/drive_service.dart';
 import 'package:sistem_de_recomandare/service/fly_service.dart';
 import 'package:sistem_de_recomandare/service/hotel_service.dart';
 import 'package:sistem_de_recomandare/service/transit_service.dart';
+import 'package:sistem_de_recomandare/travel_service.dart';
 
 class httpService {
 
@@ -34,11 +35,11 @@ class httpService {
       };
       print(values);  // {0: grubs, 1:  sheep}
 
-      final value1 = values[0];
-      final value2 = values[1];
-      final value3 = values[2];
+      // final value1 = values[0];
+      // final value2 = values[1];
+      // final value3 = values[2];
 
-      for(int i=1;i<6;i++) {
+      for(int i=1;i<values.length;i++) {
         ids.add(int.parse(values[i]));
       }
       print(ids);
@@ -82,7 +83,14 @@ class httpService {
       }
     ];
 
+    List<Location> location = await locationFromAddress(destination);
+    var latitude = location[0].latitude.toString();
+    var longitude = location[0].longitude.toString();
 
+    var url= "http://www.iatageo.com/getCode/$latitude/$longitude";
+    final result = await client.get(Uri.parse(url));
+    final iataCodeDestination = json.decode(result.body);
+    print(iataCodeDestination);
     List<Node> carNode;
     carNode = await TronsonRouteApiProviderWithCar().getTronsonRouteDetailFromOriginAndDestinationWithCarInternet(origin, destination);
     //print(" Node $i : $carNode[i]");
@@ -92,7 +100,7 @@ class httpService {
     List<Node> trainNodes;
     trainNodes = await TronsonRouteApiProviderWithTransit().getRouteDetailToRomanianAirportWithTrain(origin);
     List<Node> hotelNode;
-    hotelNode = await HotelApiProvider().getHotelDetailsFromDestinationInternet("LON", nrAdults, checkIn_date, checkOut_date, roomQty);
+    hotelNode = await HotelApiProvider().getHotelDetailsFromDestinationInternet(iataCodeDestination['code'], nrAdults, checkIn_date, checkOut_date, roomQty);
     List<Node> flyNodes1=[];
     List<Node> flyNodes2=[];
     List<Node> flyNodes3=[];
@@ -109,11 +117,11 @@ class httpService {
     List<Node> activitiesNode9=[];
     List<Node> activitiesNode10=[];
 
-    flyNodes1 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[0]["iataCode"],"LON",departure_date, nrAdults);
-    flyNodes2 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[1]["iataCode"],"LON",departure_date, nrAdults);
-    flyNodes3 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[2]["iataCode"],"LON",departure_date, nrAdults);
-    flyNodes4 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[3]["iataCode"],"LON",departure_date, nrAdults);
-    flyNodes5 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[4]["iataCode"],"LON",departure_date, nrAdults);
+    flyNodes1 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[0]["iataCode"],iataCodeDestination['code'],departure_date, nrAdults);
+    flyNodes2 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[1]["iataCode"],iataCodeDestination['code'],departure_date, nrAdults);
+    flyNodes3 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[2]["iataCode"],iataCodeDestination['code'],departure_date, nrAdults);
+    flyNodes4 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[3]["iataCode"],iataCodeDestination['code'],departure_date, nrAdults);
+    flyNodes5 = await TronsonRouteApiProviderForFly().getTronsonRouteDetailFromOriginAndDestinationWithAirInternet(romaniaAirportsMap[4]["iataCode"],iataCodeDestination['code'],departure_date, nrAdults);
 
     print("NUUUUUUUUUUUUUUUUUU");
 
@@ -126,14 +134,16 @@ class httpService {
         print(longitude);
         activitiesNode1 = await ActivitiesProviderApi().getActivitiesListFromDestinationInternet(
             latitude, longitude);
+        print(activitiesNode1);
 
-        List<Location> location2 = await locationFromAddress(hotelNode[7]?.name);
+
+        List<Location> location2 = await locationFromAddress(hotelNode[5]?.name);
         var latitude2 = location2[0].latitude.toString();
         var longitude2 = location2[0].longitude.toString();
         activitiesNode2 = await ActivitiesProviderApi().getActivitiesListFromDestinationInternet(
             latitude2, longitude2);
 
-        List<Location> location3 = await locationFromAddress(hotelNode[8]?.name);
+        List<Location> location3 = await locationFromAddress(hotelNode[4]?.name);
         var latitude3 = location3[0].latitude.toString();
         var longitude3 = location3[0].longitude.toString();
         activitiesNode3 = await ActivitiesProviderApi().getActivitiesListFromDestinationInternet(
@@ -142,12 +152,13 @@ class httpService {
         print(e.toString());
       }
 
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    print(activitiesNode1);
+    print(activitiesNode2);
     print(activitiesNode3);
-    print(activitiesNode4);
-    print(activitiesNode5);
-    print(activitiesNode6);
-    print(activitiesNode7);
-    print(activitiesNode8);
+    // print(activitiesNode6);
+    // print(activitiesNode7);
+    // print(activitiesNode8);
 
 
     var car = [carNode,carNodes].expand((x) => x).toList();
@@ -265,7 +276,7 @@ class httpService {
           body: json.encode(nodeData)
       );
     }
-    for(int i=6;i<hotelNode.length; i++) {
+    for(int i=0;i<hotelNode.length; i++) {
       final nodeData = {
         'name' : i.toString(),
         'weight': hotelNode[i].weight.toString(),
@@ -322,15 +333,21 @@ class httpService {
 
     var response= await fetchServerInfo();
     List<Node> listNodes=[];
-    listNodes.add(allNodes[response[0]-1]);
-    listNodes.add(allNodes[response[1]-1]);
-    listNodes.add(allNodes[response[2]-1]);
-    listNodes.add(allNodes[response[3]-1]);
-    listNodes.add(allNodes[response[4]-1]);
+
+    if(response.length==5) {
+      listNodes.add(allNodes[response[0] - 1]);
+      listNodes.add(allNodes[response[1] - 1]);
+      listNodes.add(allNodes[response[2] - 1]);
+      listNodes.add(allNodes[response[3] - 1]);
+      listNodes.add(allNodes[response[4] - 1]);
+    }else{
+      listNodes.add(allNodes[response[0]-1]);
+      listNodes.add(allNodes[response[1]-1]);
+      listNodes.add(allNodes[response[2]-1]);
+      listNodes.add(allNodes[response[3]-1]);
+    }
     print("LISTAAAAAAAAAAAAAAAAAAAAA");
     print(listNodes);
     return listNodes;
-
   }
-
 }

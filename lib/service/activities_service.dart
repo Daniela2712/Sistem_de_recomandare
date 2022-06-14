@@ -38,6 +38,20 @@ class Activity {
     return 'Activity(id: $id, latitude: $latitude, longitude: $longitude, name: $name, description: $description,rating:$rating, picture:$picture, cost:$cost, currency:$currency)';
   }
 }
+
+double calcCost(String cost, String currency){
+  double costTotal;
+  if(currency=="EUR") {
+    costTotal =double.parse(cost);
+  }else if(currency=="USD"){
+    costTotal =double.parse(cost)*0.95;
+  }else if(currency=="GBP"){
+    costTotal =double.parse(cost)/1.17;
+  }else{
+    costTotal =double.parse(cost);
+  }
+  return costTotal;
+}
 class ActivitiesProviderApi {
 
   Future<List<List<Node>>> getActivitiesForMultipleHotelDestinations(
@@ -87,8 +101,8 @@ List<List<Node>> aList=[];
       Uri.parse('https://test.api.amadeus.com/v1/security/oauth2/token'),
       body: {
         "grant_type": "client_credentials",
-        "client_id": "zHmPH2go7aCsH6qAigzfbvSjNj2EvaA1",
-        "client_secret": "rIJW2hknmn7g4o5w",
+        "client_id": "VU9Amuj3zDuOTH8yHgjOyWo1becRjDX1",
+        "client_secret": "rEsHUp1euN08sCYQ",
       },
     );
     //  print(resultsFlights);
@@ -99,7 +113,7 @@ List<List<Node>> aList=[];
         // print(resultsFlights.body);
         var security = jsonDecode(resultsFlights.body);
 
-        // print(security);
+         print(security);
         if (security != null) {
           var tokenType = security['token_type'];
           // print(tokenType);
@@ -127,10 +141,9 @@ List<List<Node>> aList=[];
             activity.currency=d['price']['currencyCode'];
             activitiesList.add(activity);
 
-
-            n.name=activity.name.toString();
-            n.cost=activity.cost.toString();
             n.currency=activity.currency.toString();
+            n.name=activity.name.toString();
+            n.cost=calcCost(activity.cost.toString(), activity.currency.toString()).toString();
             n.rating=activity.rating.toString();
             n.description=activity.description.toString();
             n.weight=NodeCalc().hotelWeight(n).toString();

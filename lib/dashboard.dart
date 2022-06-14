@@ -185,9 +185,10 @@ class _FirstTripInfoState extends State<FirstTripInfo> {
     NumberFormat formatter = new NumberFormat("00");
     if (selected != null && selected != selectedDate)
       setState(() {
+        selectedDate=selected;
         _dateController.text = "${selectedDate.year}-${formatter.format(selectedDate.month)}-${formatter.format(selectedDate.day)}";
         departure_date=_dateController.text;
-        selectedDate=selected;
+
       });
   }
   navigateToNextActivity(BuildContext context) {

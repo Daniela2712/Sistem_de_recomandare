@@ -122,8 +122,8 @@ class TronsonRouteApiProviderForFly {
       Uri.parse('https://test.api.amadeus.com/v1/security/oauth2/token'),
       body: {
         "grant_type": "client_credentials",
-        "client_id": "zHmPH2go7aCsH6qAigzfbvSjNj2EvaA1",
-        "client_secret": "rIJW2hknmn7g4o5w",
+        "client_id": "VU9Amuj3zDuOTH8yHgjOyWo1becRjDX1",
+        "client_secret": "rEsHUp1euN08sCYQ",
       },
     );
     List<List<List<Fly>>> dataList = [];

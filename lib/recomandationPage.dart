@@ -85,14 +85,72 @@ class _UserFormState extends State<UserForm> {
 
     setState(() {
       _isLoading = false;
-      airport=result[0];
-      fly=result[1];
-      hotel=result[2];
-      activity1=result[3];
-      activity2=result[4];
+      if(result.length==5) {
+        print("1111111111111111111111111");
+        airport = result[0];
+        fly = result[1];
+        hotel = result[2];
+        activity1 = result[3];
+        activity2 = result[4];
+
+      }else if(result.length==4){
+        print("222222222222222222222222");
+        airport = result[0];
+        hotel = result[1];
+        activity1 = result[2];
+        activity2 = result[3];
+      }
+
     });
-    print("HOOOOOOTTTTEEEEELLLLLLLL");
-    print(hotel.name);
+    // if(result.length==5) {
+    //   print("1111111111111111111111111");
+    //   airport = result[0];
+    //   fly = result[1];
+    //   hotel = result[2];
+    //   activity1 = result[3];
+    //   activity2 = result[4];
+    //   print(airport);
+    //   print(fly);
+    //   print(hotel);
+    //   print(activity1);
+    //   print(activity2);
+    // }else if(result.length==4){
+    //   print("222222222222222222222222");
+    //   airport = result[0];
+    //   fly = result[1];
+    //   hotel = result[1];
+    //   activity1 = result[2];
+    //   activity2 = result[3];
+    //   print(airport);
+    //   print(fly);
+    //   print(hotel);
+    //   print(activity1);
+    //   print(activity2);
+    // }
+    // else{
+    //   print("3333333333333333333333333333");
+    //   airport = result[0];
+    //   fly = result[1];
+    //   hotel = result[2];
+    //   activity1 = result[3];
+    //   activity2 = result[4];
+    //   print(airport);
+    //   print(fly);
+    //   print(hotel);
+    //   print(activity1);
+    //   print(activity2);
+    // }
+    // print("HOOOOOOTTTTEEEEELLLLLLLL");
+    // print(result[0]);
+    // print(result[1]);
+    // print(result[2]);
+    // print(result[3]);
+    // print(result[4]);
+    // airport = result[0];
+    // fly = result[1];
+    // hotel = result[2];
+    // activity1 = result[3];
+    // activity2 = result[4];
     navigateToNextActivity2(context);
     print(_isLoading);
   }
@@ -224,9 +282,9 @@ class _UserFormState extends State<UserForm> {
     if (selected != null && selected != selectedDate)
 
     setState(() {
-        _checkInController.text = "${selectedDate.year}-${formatter.format(selectedDate.month)}-${formatter.format(selectedDate.day)}";
+      selectedDate=selected;
+      _checkInController.text = "${selectedDate.year}-${formatter.format(selectedDate.month)}-${formatter.format(selectedDate.day)}";
         checkIn_date=_checkInController.text;
-        selectedDate=selected;
       });
   }
   _selectDate2(BuildContext context) async {
@@ -240,9 +298,10 @@ class _UserFormState extends State<UserForm> {
     if (selected != null && selected != selectedDate)
 
     setState(() {
-        _checkOutController.text = "${selectedDate.year}-${formatter.format(selectedDate.month)}-${formatter.format(selectedDate.day)}";
+      selectedDate=selected;
+
+      _checkOutController.text = "${selectedDate.year}-${formatter.format(selectedDate.month)}-${formatter.format(selectedDate.day)}";
         checkOut_date=_checkOutController.text;
-        selectedDate=selected;
       });
   }
   navigateToNextActivity(BuildContext context) {
