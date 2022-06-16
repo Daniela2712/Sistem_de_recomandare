@@ -51,7 +51,7 @@ class _PlanState extends State<Plan> {
   }
   _bugetFunction(String cost1,String cost2,String cost3,String cost4,String cost5, ){
     double buget;
-    if(cost2!="null"){
+    if(cost2!=null){
     buget=double.parse(cost1)+double.parse(cost2)+double.parse(cost3)+double.parse(cost4)+double.parse(cost5);
     }else{
       buget=double.parse(cost1)+double.parse(cost3)+double.parse(cost4)+double.parse(cost5);
@@ -113,7 +113,7 @@ class _PlanState extends State<Plan> {
           " "
         ],
         [
-          "Buget",
+          "Budget",
           " "
               " ",
           " ",
@@ -168,7 +168,7 @@ class _PlanState extends State<Plan> {
           " "
         ],
         [
-          "Buget",
+          "Budget",
           " "
               " ",
           " ",

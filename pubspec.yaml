@@ -46,7 +46,10 @@ dev_dependencies:
     sdk: flutter
   moor_generator: ^4.6.0+1
   build_runner: ^2.1.7
-
+  flutter_launcher_icons: ^0.9.3
+flutter_icons:
+  android: "icons"
+  image_path: "assets/icons/travel_lunch.png"
 flutter:
   uses-material-design: true
 
